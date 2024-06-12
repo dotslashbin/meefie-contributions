@@ -2,17 +2,18 @@ import { initializeApp }  from 'firebase/app'
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyAeOSdEtw-fR-P2WmS1qUdpTxs8JVznVnU",
-    authDomain: "meefie-distirbutions.firebaseapp.com",
-    projectId: "meefie-distirbutions",
-    storageBucket: "meefie-distirbutions.appspot.com",
-    messagingSenderId: "158045566203",
-    appId: "1:158045566203:web:d40dd96bf917812065ec5e",
-    measurementId: "G-M3DJ3L99FN"
+    apiKey: "AIzaSyBgKJbn7grsCTFpoc5vb5vi_MaFOV0rIsw",
+    authDomain: "meefie-contributions.firebaseapp.com",
+    projectId: "meefie-contributions",
+    storageBucket: "meefie-contributions.appspot.com",
+    messagingSenderId: "720478229275",
+    appId: "1:720478229275:web:b1dcf9796cd01ec7f9b9be"
 };
 
-const app = initializeApp(firebaseConfig)
+// Initialize Firebase app
+export const app = initializeApp(firebaseConfig);
 
+// Get Firestore instance
 export const db = getFirestore(app);
 
 export const COLLECTION_NAME =  'contributors'
