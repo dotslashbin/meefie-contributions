@@ -1,11 +1,14 @@
 import React from 'react'
-// @ts-ignore
+import NavBar from '../components/NavBar'
 
 export default function Index() {
 
     return (
         <div>
-            the index page
+            <NavBar />
+            <div>
+                this is where the form is
+            </div>
         </div>
     )
 }
