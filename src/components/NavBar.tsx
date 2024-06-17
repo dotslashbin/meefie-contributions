@@ -1,48 +1,7 @@
 
 import Link from "next/link";
-
-import WalletIcon from "../../public/icons/WalletIcon";
-
-import { formatAddress } from "@/utils/helpers";
-
-
-import { useSDK, MetaMaskProvider } from "@metamask/sdk-react";
-
-export const ConnectWalletButton = () => {
-    const { sdk, connected, connecting, account } = useSDK();
-
-    const connect = async () => {
-        try {
-            console.log("#YOU ARE trying to connect")
-            await sdk?.connect();
-        } catch (err) {
-            console.warn(`No accounts found`, err);
-        }
-    };
-
-    const disconnect = () => {
-        if (sdk) {
-            sdk.terminate();
-        }
-    };
-
-    console.log("#DEBUG ... connected: ", connected)
-
-    return (
-        <div className="relative">
-            {connected ? (
-                <div>
-                    account: { formatAddress(account) }
-                </div>
-            ) : (
-                <button disabled={connecting} onClick={connect}>
-                    <WalletIcon className="mr-2 h-4 w-4" /> Connect Wallet
-                </button>
-            )}
-        </div>
-    );
-};
-
+import {ConnectWalletButton} from "@/components/ConnectWalletButton";
+import { MetaMaskProvider } from "@metamask/sdk-react";
 
 export const NavBar = () => {
     const host =
@@ -59,7 +18,6 @@ export const NavBar = () => {
 
     return (
         <nav className="flex items-center justify-between max-w-screen-xl px-6 mx-auto py-7 rounded-xl">
-
             <MetaMaskProvider debug={true} sdkOptions={sdkOptions}>
                 <ConnectWalletButton />
             </MetaMaskProvider>
