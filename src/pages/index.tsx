@@ -1,25 +1,19 @@
 import React from 'react'
-// @ts-ignore
-import { addContributor } from '@/services/firebase';
-import {Contributor} from "@/types";
+import NavBar from '../components/NavBar'
+import { useStore }  from '../context/StoreContext'
 
 export default function Index() {
 
-    const handleSubmit = async () => {
+    const { state } = useStore()
 
-        const data: Contributor = ({
-            name: 'Ax',
-            email: 'Bx',
-            wallet: 'Cx',
-            transaction_hash: 'Dx',
-        });
-
-        await addContributor(data);
-    }
+    console.log('#DEBUG state: ', state)
 
     return (
         <div>
-            <button onClick={handleSubmit}>Test save</button>
+            <NavBar />
+            <div>
+                this is where the form is {state.account}
+            </div>
         </div>
     )
 }
