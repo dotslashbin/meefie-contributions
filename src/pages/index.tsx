@@ -1,19 +1,17 @@
 import React from 'react'
-import NavBar from '../components/NavBar'
+import NavBar from '../components/sections/NavBar'
 import { useStore }  from '../context/StoreContext'
+import ContributionForm from "@/components/sections/ContributionForm";
+import WelcomeScreen from "@/components/sections/WelcomeScreen";
 
 export default function Index() {
 
     const { state } = useStore()
 
-    console.log('#DEBUG state: ', state)
-
     return (
         <div>
             <NavBar />
-            <div>
-                this is where the form is {state.account}
-            </div>
+            { state.account? <ContributionForm />: <WelcomeScreen />}
         </div>
     )
 }

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useSDK } from "@metamask/sdk-react"
 import { formatAddress } from "@/utils/helpers"
-import WalletIcon from "../../public/icons/WalletIcon"
+import WalletIcon from "../../../public/icons/WalletIcon"
 import { useStore } from '@/context/StoreContext'
 
 export const ConnectWalletButton = () => {
@@ -34,6 +34,7 @@ export const ConnectWalletButton = () => {
             {connected && account ? (
                 <div>
                     account: { formatAddress(account) }
+                    <button onClick={disconnect}>disconnect</button>
                 </div>
             ) : (
                 <button disabled={connecting} onClick={connect}>
