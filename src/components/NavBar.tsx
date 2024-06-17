@@ -3,6 +3,8 @@ import Link from "next/link";
 
 import WalletIcon from "../../public/icons/WalletIcon";
 
+import { formatAddress } from "@/utils/helpers";
+
 
 import { useSDK, MetaMaskProvider } from "@metamask/sdk-react";
 
@@ -30,7 +32,7 @@ export const ConnectWalletButton = () => {
         <div className="relative">
             {connected ? (
                 <div>
-                    account: {account}
+                    account: { formatAddress(account) }
                 </div>
             ) : (
                 <button disabled={connecting} onClick={connect}>
