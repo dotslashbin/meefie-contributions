@@ -1,14 +1,12 @@
-import React from 'react'
+import React, { ReactElement } from 'react';
 
-const ContributionForm = () => {
+export default function ContributionForm(): ReactElement {
     return (
         <div>
-            <div>Name: <input type="text"/></div>
-            <div>Email: <input type="text"/></div>
-            <div>Amount: <input type="text"/></div>
+            <div>Name: <input type="text" /></div>
+            <div>Email: <input type="text" /></div>
+            <div>Amount: <input type="text" /></div>
             <button>Submit donation</button>
         </div>
-    )
+    );
 }
-
-export default ContributionForm
