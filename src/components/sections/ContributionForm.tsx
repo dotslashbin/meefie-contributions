@@ -2,6 +2,7 @@ import React, { ReactElement, useEffect, useState } from 'react';
 import { useStore } from "@/context/StoreContext";
 import { ethers } from 'ethers'
 import {MIN_DONATION, TOKEN_ABI, TOKEN_ADDRESS} from "../../../config";
+import { BalanceType } from "@/types/Web3Types";
 
 export default function ContributionForm(): ReactElement {
 
@@ -13,7 +14,8 @@ export default function ContributionForm(): ReactElement {
 
     useEffect(() => {
         try {
-            getBalance().then((balances) => {
+            getBalance().then((balances: BalanceType) => {
+                console.log("ETHE BALA: ", balances)
                 if (balances.eth) {
                     setEthBalance(ethers.utils.formatEther(balances.eth))
                 }
@@ -45,6 +47,10 @@ export default function ContributionForm(): ReactElement {
             token: await tokenContract.balanceOf(state.account)
         }
     }
+
+    useEffect(() => {
+
+    }, [state.account]);
 
     return (
         <div>

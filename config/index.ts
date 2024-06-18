@@ -4,4 +4,4 @@ export const TOKEN_ABI = [
     "function balanceOf(address owner) view returns (uint256)"
 ]
 
-export const MIN_DONATION = 1000
+export const MIN_DONATION = 100
