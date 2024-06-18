@@ -1,15 +1,29 @@
-import React, { ReactElement, useEffect } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import { useStore } from "@/context/StoreContext";
 import { ethers } from 'ethers'
+import {TOKEN_ABI, TOKEN_ADDRESS} from "../../../config";
 
 export default function ContributionForm(): ReactElement {
 
     const { state } = useStore()
 
+    const [ ethBalance, setEthBalance ] = useState<string>('')
+    const [ tokenBalance, setTokenBalance ] = useState<string>('')
+
     useEffect(() => {
         try {
-            getBalance().then((returns) => {
-                console.log("#RETURNS: ", ethers.utils.formatEther(returns))
+            getBalance().then((balances) => {
+                // console.log("#RETURNS: ", ethers.utils.formatEther(returns))
+
+                if (balances.eth) {
+                    setEthBalance(ethers.utils.formatEther(balances.eth))
+                }
+
+                if(balances.token) {
+                    setTokenBalance(ethers.utils.formatEther(balances.token))
+                }
+
+
             })
 
         } catch (error) {
@@ -18,21 +32,24 @@ export default function ContributionForm(): ReactElement {
     }, []);
 
     const getBalance = async () => {
-        console.log("# !! Fetching ETH and USDT balance...")
-
         // @ts-ignore
         const provider = new ethers.providers.Web3Provider(window.ethereum)
+        const tokenContract = new ethers.Contract(TOKEN_ADDRESS, TOKEN_ABI, provider)
 
-        const ETHBalance = await provider.getBalance(state.account)
-
-        return ETHBalance;
+        return {
+            eth: await provider.getBalance(state.account),
+            token: await tokenContract.balanceOf(state.account)
+        }
     }
 
 
     return (
         <div>
             <div>
-                USDT BALANCE: {state.account}
+                ETH bal: { ethBalance }
+            </div>
+            <div>
+                USDT (OR OTHER TOKEN): { tokenBalance }
             </div>
             <div>Name: <input type="text" /></div>
             <div>Email: <input type="text" /></div>
