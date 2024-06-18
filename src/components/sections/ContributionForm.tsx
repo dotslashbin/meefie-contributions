@@ -13,22 +13,33 @@ export default function ContributionForm(): ReactElement {
     const [ canDonate, setCanDonate ] = useState<boolean>(false)
 
     useEffect(() => {
-        try {
-            getBalance().then((balances: BalanceType) => {
-                console.log("ETHE BALA: ", balances)
+        const getBalance = async () => {
+            try {
+                // @ts-ignore
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                const tokenContract = new ethers.Contract(TOKEN_ADDRESS, TOKEN_ABI, provider);
+
+                const balances: BalanceType = {
+                    eth: await provider.getBalance(state.account),
+                    token: await tokenContract.balanceOf(state.account),
+                };
+
                 if (balances.eth) {
-                    setEthBalance(ethers.utils.formatEther(balances.eth))
+                    setEthBalance(ethers.utils.formatEther(balances.eth));
                 }
 
-                if(balances.token) {
-                    setTokenBalance(ethers.utils.formatEther(balances.token))
+                if (balances.token) {
+                    setTokenBalance(ethers.utils.formatEther(balances.token));
                 }
-            })
+            } catch (error) {
+                console.error('Error fetching balance: ', error);
+            }
+        };
 
-        } catch (error) {
-            console.error('Error fetching balance: ', error)
-        }
-    }, []);
+        getBalance().then(() => {
+            console.log("Balance updated ....")
+        });
+    }, [state.account]);
 
     useEffect(() => {
         if( parseInt(tokenBalance) >= MIN_DONATION) {
@@ -37,16 +48,6 @@ export default function ContributionForm(): ReactElement {
 
     }, [tokenBalance]);
 
-    const getBalance = async () => {
-        // @ts-ignore
-        const provider = new ethers.providers.Web3Provider(window.ethereum)
-        const tokenContract = new ethers.Contract(TOKEN_ADDRESS, TOKEN_ABI, provider)
-
-        return {
-            eth: await provider.getBalance(state.account),
-            token: await tokenContract.balanceOf(state.account)
-        }
-    }
 
     useEffect(() => {
 
@@ -58,7 +59,7 @@ export default function ContributionForm(): ReactElement {
                 ETH bal: { ethBalance }
             </div>
             <div>
-                USDT (OR OTHER TOKEN): { tokenBalance }
+                USD Token (OR OTHER TOKEN): { tokenBalance }
             </div>
 
             { canDonate? (
@@ -69,7 +70,7 @@ export default function ContributionForm(): ReactElement {
                     <button>Submit donation</button>
                 </div>
                 ) : (
-                    <div>Not enough balance ( USDT ) </div>
+                    <div>Not enough balance ( USD ) </div>
                 )
             }
         </div>
