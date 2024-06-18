@@ -20,6 +20,7 @@ export const ConnectWalletButton = () => {
     const disconnect = () => {
         if (sdk) {
             sdk.terminate();
+            dispatch({ type: 'SET_ACCOUNT', payload: '' })
         }
     };
 

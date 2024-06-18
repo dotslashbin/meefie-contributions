@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function ContributionForm() {
+const ContributionForm = () => {
     return (
         <div>
             <div>Name: <input type="text"/></div>
@@ -10,3 +10,5 @@ export default function ContributionForm() {
         </div>
     )
 }
+
+export default ContributionForm
