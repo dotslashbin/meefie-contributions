@@ -1,7 +1,7 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import { useStore } from "@/context/StoreContext";
 import { ethers } from 'ethers'
-import {TOKEN_ABI, TOKEN_ADDRESS} from "../../../config";
+import {MIN_DONATION, TOKEN_ABI, TOKEN_ADDRESS} from "../../../config";
 
 export default function ContributionForm(): ReactElement {
 
@@ -9,12 +9,11 @@ export default function ContributionForm(): ReactElement {
 
     const [ ethBalance, setEthBalance ] = useState<string>('')
     const [ tokenBalance, setTokenBalance ] = useState<string>('')
+    const [ canDonate, setCanDonate ] = useState<boolean>(false)
 
     useEffect(() => {
         try {
             getBalance().then((balances) => {
-                // console.log("#RETURNS: ", ethers.utils.formatEther(returns))
-
                 if (balances.eth) {
                     setEthBalance(ethers.utils.formatEther(balances.eth))
                 }
@@ -22,14 +21,19 @@ export default function ContributionForm(): ReactElement {
                 if(balances.token) {
                     setTokenBalance(ethers.utils.formatEther(balances.token))
                 }
-
-
             })
 
         } catch (error) {
             console.error('Error fetching balance: ', error)
         }
     }, []);
+
+    useEffect(() => {
+        if( parseInt(tokenBalance) >= MIN_DONATION) {
+            setCanDonate(true)
+        }
+
+    }, [tokenBalance]);
 
     const getBalance = async () => {
         // @ts-ignore
@@ -42,7 +46,6 @@ export default function ContributionForm(): ReactElement {
         }
     }
 
-
     return (
         <div>
             <div>
@@ -51,10 +54,18 @@ export default function ContributionForm(): ReactElement {
             <div>
                 USDT (OR OTHER TOKEN): { tokenBalance }
             </div>
-            <div>Name: <input type="text" /></div>
-            <div>Email: <input type="text" /></div>
-            <div>Amount: <input type="text" /></div>
-            <button>Submit donation</button>
+
+            { canDonate? (
+                <div>
+                    <div>Name: <input type="text"/></div>
+                    <div>Email: <input type="text"/></div>
+                    <div>Amount: <input type="text"/></div>
+                    <button>Submit donation</button>
+                </div>
+                ) : (
+                    <div>Not enough balance ( USDT ) </div>
+                )
+            }
         </div>
     );
 }
