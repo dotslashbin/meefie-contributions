@@ -48,11 +48,6 @@ export default function ContributionForm(): ReactElement {
 
     }, [tokenBalance]);
 
-
-    useEffect(() => {
-
-    }, [state.account]);
-
     return (
         <div>
             <div>
