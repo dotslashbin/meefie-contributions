@@ -18,7 +18,7 @@ export default function ContributionForm(): ReactElement {
     }, []);
 
     const getBalance = async () => {
-        console.log("you are fetching the balance ...")
+        console.log("# !! Fetching ETH and USDT balance...")
 
         // @ts-ignore
         const provider = new ethers.providers.Web3Provider(window.ethereum)
