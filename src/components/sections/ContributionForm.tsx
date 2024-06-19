@@ -1,8 +1,9 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import { useStore } from "@/context/StoreContext";
 import { ethers } from 'ethers'
-import {MIN_DONATION, TOKEN_ABI, TOKEN_ADDRESS} from "../../../config";
+import { MIN_DONATION, TOKEN_ABI, TOKEN_ADDRESS } from "../../../config";
 import { BalanceType } from "@/types/Web3Types";
+import { sendDonation } from "@/services/Web3Service";
 
 export default function ContributionForm(): ReactElement {
 
@@ -52,8 +53,10 @@ export default function ContributionForm(): ReactElement {
 
     }, [tokenBalance]);
 
-    const sendDonation = (): void => {
-        console.log("call to send donation")
+    const subitSendDonation = (): void => {
+        sendDonation(amount).then((x) => {
+            console.log("service has finished!!", x)
+        });
     }
 
     return (
@@ -84,7 +87,7 @@ export default function ContributionForm(): ReactElement {
                         <input type="text" name="destination_wallet" value={destinationWallet} onChange={(event) => setDestinationWallet(event.target.value)} />
                         <span>{destinationWallet}</span>
                     </div>
-                    <button onClick={ sendDonation }>Submit donation</button>
+                    <button onClick={ subitSendDonation }>Submit donation</button>
                 </div>
                 ) : (
                     <div>Not enough balance ( USD ) </div>
