@@ -4,6 +4,7 @@ import { ethers } from 'ethers'
 import { MIN_DONATION, TOKEN_ABI, TOKEN_ADDRESS } from "../../../config";
 import { BalanceType } from "@/types/Web3Types";
 import { sendDonation } from "@/services/Web3Service";
+import { addContributor } from '@/services/Firebase'
 
 export default function ContributionForm(): ReactElement {
 
@@ -53,9 +54,21 @@ export default function ContributionForm(): ReactElement {
 
     }, [tokenBalance]);
 
-    const subitSendDonation = (): void => {
-        sendDonation(amount).then((transaction) => {
+    const subitSendDonation = () => {
+        sendDonation(amount).then((transaction: any) => {
             console.log("service has finished!!", transaction)
+            // @ts-ignore
+            if (transaction) {
+                addContributor({
+                    name: name,
+                    email: email,
+                    amount: amount,
+                    destination_wallet: destinationWallet,
+                    transaction_hash: transaction.transactionHash,
+                }).then((result) => {
+                    console.log("db saved: ",result)
+                }).catch((error) => { console.error(error) })
+            }
         });
     }
 

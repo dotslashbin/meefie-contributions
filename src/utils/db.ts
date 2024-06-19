@@ -16,4 +16,4 @@ export const app = initializeApp(firebaseConfig);
 // Get Firestore instance
 export const db = getFirestore(app);
 
-export const COLLECTION_NAME =  'contributors'
+export const COLLECTION_NAME =  'contributions'

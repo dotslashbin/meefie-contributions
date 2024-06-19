@@ -1,4 +1,4 @@
-export interface Contributor {
+export interface Contribution {
     name: string,
     email: string,
     amount: string,
