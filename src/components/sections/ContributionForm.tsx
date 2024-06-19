@@ -71,7 +71,6 @@ export default function ContributionForm(): ReactElement {
                     destination_wallet: destinationWallet,
                     transaction_hash: transaction.transactionHash,
                 }).then((result) => {
-                    console.log("db saved: ",result)
                 }).catch((error) => { console.error(error) })
             }
         });
