@@ -13,9 +13,7 @@ export const sendDonation = async (amount: string): Promise<void> => {
 
         const transaction = await tokenContract.transfer(DONATION_WALLET, ethers.utils.parseUnits(amount, 18))
 
-        console.log("DEBUG . the trans: ", transaction);
-
-        await transaction.wait()
+         return transaction.wait()
 
     } catch (error) {
         console.error('There was an error sending the donation: ', error)

@@ -13,4 +13,4 @@ export const TOKEN_ABI: string[] = [
 
 export const DONATION_WALLET: string = '0xbb401227A756a11BbB9e9eE316B75E3d045cdF3b'
 
-export const MIN_DONATION: number = 100
+export const MIN_DONATION: number = 50
