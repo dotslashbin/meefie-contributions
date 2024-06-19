@@ -11,9 +11,13 @@ export default function ContributionForm(): ReactElement {
     const [ ethBalance, setEthBalance ] = useState<string>('')
     const [ tokenBalance, setTokenBalance ] = useState<string>('')
     const [ canDonate, setCanDonate ] = useState<boolean>(false)
+    const [ email, setEmail ] = useState<string>('')
+    const [ name, setName ] = useState<string>('')
+    const [ amount, setAmount ] = useState<string>('')
+    const [ destinationWallet, setDestinationWallet ] = useState<string>('')
 
     useEffect(() => {
-        const getBalance = async () => {
+        const initBalances = async () => {
             try {
                 // @ts-ignore
                 const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -36,7 +40,7 @@ export default function ContributionForm(): ReactElement {
             }
         };
 
-        getBalance().then(() => {
+        initBalances().then(() => {
             console.log("Balance updated ....")
         });
     }, [state.account]);
@@ -47,6 +51,10 @@ export default function ContributionForm(): ReactElement {
         }
 
     }, [tokenBalance]);
+
+    const sendDonation = (): void => {
+        console.log("call to send donation")
+    }
 
     return (
         <div>
@@ -59,10 +67,24 @@ export default function ContributionForm(): ReactElement {
 
             { canDonate? (
                 <div>
-                    <div>Name: <input type="text"/></div>
-                    <div>Email: <input type="text"/></div>
-                    <div>Amount: <input type="text"/></div>
-                    <button>Submit donation</button>
+                    <div>
+                        Name: <input name="name" type="text" value={name} onChange={(event) => setName(event.target.value)}/>
+                        <span>{ name }</span>
+                    </div>
+                    <div>
+                        Email: <input name="email" type="text" value={email} onChange={(event) => setEmail(event.target.value)}/>
+                        <span>{ email }</span>
+                    </div>
+                    <div>
+                        Amount: <input name="donation_amt" type="number" min={MIN_DONATION} value={amount} onChange={(event) => setAmount(event.target.value)}/>
+                        { amount }
+                    </div>
+                    <div>
+                        Destination Wallet (optional .. if filled in, MFT will be sent to this wallet during vesting period):
+                        <input type="text" name="destination_wallet" value={destinationWallet} onChange={(event) => setDestinationWallet(event.target.value)} />
+                        <span>{destinationWallet}</span>
+                    </div>
+                    <button onClick={ sendDonation }>Submit donation</button>
                 </div>
                 ) : (
                     <div>Not enough balance ( USD ) </div>

@@ -1,6 +1,6 @@
 
 import Link from "next/link";
-import {ConnectWalletButton} from "@/components/buttons/ConnectWalletButton";
+import { ConnectWalletButton } from "@/components/buttons/ConnectWalletButton";
 import { MetaMaskProvider } from "@metamask/sdk-react";
 
 export const NavBar = () => {
