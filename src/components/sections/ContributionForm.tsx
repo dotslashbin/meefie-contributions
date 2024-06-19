@@ -17,6 +17,8 @@ export default function ContributionForm(): ReactElement {
     const [ name, setName ] = useState<string>('')
     const [ amount, setAmount ] = useState<string>('')
     const [ destinationWallet, setDestinationWallet ] = useState<string>('')
+    const [ donationTxnHash, setDonationTxn ] = useState<string>('')
+    const [ isBusy, setIsBusy ] = useState<boolean>(false)
 
     useEffect(() => {
         const initBalances = async () => {
@@ -59,6 +61,9 @@ export default function ContributionForm(): ReactElement {
             console.log("service has finished!!", transaction)
             // @ts-ignore
             if (transaction) {
+
+                setDonationTxn(transaction.transactionHash)
+
                 addContributor({
                     name: name,
                     email: email,
