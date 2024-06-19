@@ -54,8 +54,8 @@ export default function ContributionForm(): ReactElement {
     }, [tokenBalance]);
 
     const subitSendDonation = (): void => {
-        sendDonation(amount).then((x) => {
-            console.log("service has finished!!", x)
+        sendDonation(amount).then((transaction) => {
+            console.log("service has finished!!", transaction)
         });
     }
 
