@@ -2,14 +2,12 @@
 import React, { createContext, useContext, useReducer, ReactNode } from 'react'
 
 interface State {
-    count: number,
     account: string
 }
 
-type Action = { type: 'SET_ACCOUNT', payload: string };
+type Action = { type: 'SET_ACCOUNT', payload: string } | { type: 'SAVE_DONATION', payload: {} };
 
 const initialState: State = {
-    count: 0,
     account: ''
 };
 

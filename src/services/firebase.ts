@@ -1,6 +1,6 @@
 import { collection, addDoc } from 'firebase/firestore';
 import { db } from '@/utils/db'
-import { Contributor} from "@/types";
+import { Contributor } from "@/types";
 
 // Add a new document to a collection
 export const addContributor = async (contributor: Contributor) => {
