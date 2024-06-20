@@ -19,6 +19,7 @@ export default function ContributionForm(): ReactElement {
     const [ destinationWallet, setDestinationWallet ] = useState<string>('')
     const [ donationTxnHash, setDonationTxn ] = useState<string>('')
     const [ isBusy, setIsBusy ] = useState<boolean>(false)
+    const [ message, setMessage ] = useState<string>('')
 
     useEffect(() => {
         const initBalances = async () => {
@@ -57,20 +58,21 @@ export default function ContributionForm(): ReactElement {
     }, [tokenBalance]);
 
     const subitSendDonation = () => {
+        setIsBusy(true)
         sendDonation(amount).then((transaction: any) => {
-            console.log("service has finished!!", transaction)
             // @ts-ignore
             if (transaction) {
-
                 setDonationTxn(transaction.transactionHash)
-
                 addContributor({
                     name: name,
                     email: email,
                     amount: amount,
+                    user_wallet: state.account,
                     destination_wallet: destinationWallet,
                     transaction_hash: transaction.transactionHash,
                 }).then((result) => {
+                    setIsBusy(false)
+                    setMessage(`${name} donated ${amount} | transaction: ${transaction.transactionHash} | wallet: ${state.account}`)
                 }).catch((error) => { console.error(error) })
             }
         });
@@ -104,12 +106,20 @@ export default function ContributionForm(): ReactElement {
                         <input type="text" name="destination_wallet" value={destinationWallet} onChange={(event) => setDestinationWallet(event.target.value)} />
                         <span>{destinationWallet}</span>
                     </div>
-                    <button onClick={ subitSendDonation }>Submit donation</button>
+                    { isBusy? (<span>Loading ....</span>): (
+                        <button onClick={subitSendDonation}>Submit donation</button>)
+                    }
+
                 </div>
-                ) : (
+            ) : (
                     <div>Not enough balance ( USD ) </div>
                 )
             }
+
+            <div>
+                <h4>RESULT LOG:</h4>
+                <span>{ message }</span>
+            </div>
         </div>
     );
 }
