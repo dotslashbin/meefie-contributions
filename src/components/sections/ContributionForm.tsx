@@ -38,7 +38,7 @@ export default function ContributionForm(): ReactElement {
                 }
 
                 if (balances.token) {
-                    setTokenBalance(ethers.utils.formatEther(balances.token));
+                    setTokenBalance(ethers.utils.formatUnits(balances.token, 6));
                 }
             } catch (error) {
                 console.error('Error fetching balance: ', error);
