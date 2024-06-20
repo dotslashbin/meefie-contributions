@@ -1,9 +1,9 @@
-import {Contributor} from "@/types/Contributor";
-import {DataReader} from "@/types/DataReader";
-import  {DataWriter} from "@/types/DataWriter";
+import { Contribution } from "@/types/Contributor";
+import { DataReader } from "@/types/DataReader";
+import { DataWriter } from "@/types/DataWriter";
 
 export type {
-    Contributor,
+    Contribution,
     DataReader,
     DataWriter
 }

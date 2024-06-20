@@ -4,6 +4,7 @@ import { ethers } from 'ethers'
 import { MIN_DONATION, TOKEN_ABI, TOKEN_ADDRESS } from "../../../config";
 import { BalanceType } from "@/types/Web3Types";
 import { sendDonation } from "@/services/Web3Service";
+import { addContributor } from '@/services/Firebase'
 
 export default function ContributionForm(): ReactElement {
 
@@ -16,6 +17,9 @@ export default function ContributionForm(): ReactElement {
     const [ name, setName ] = useState<string>('')
     const [ amount, setAmount ] = useState<string>('')
     const [ destinationWallet, setDestinationWallet ] = useState<string>('')
+    const [ donationTxnHash, setDonationTxn ] = useState<string>('')
+    const [ isBusy, setIsBusy ] = useState<boolean>(false)
+    const [ message, setMessage ] = useState<string>('')
 
     useEffect(() => {
         const initBalances = async () => {
@@ -53,9 +57,24 @@ export default function ContributionForm(): ReactElement {
 
     }, [tokenBalance]);
 
-    const subitSendDonation = (): void => {
-        sendDonation(amount).then((transaction) => {
-            console.log("service has finished!!", transaction)
+    const subitSendDonation = () => {
+        setIsBusy(true)
+        sendDonation(amount).then((transaction: any) => {
+            // @ts-ignore
+            if (transaction) {
+                setDonationTxn(transaction.transactionHash)
+                addContributor({
+                    name: name,
+                    email: email,
+                    amount: amount,
+                    user_wallet: state.account,
+                    destination_wallet: destinationWallet,
+                    transaction_hash: transaction.transactionHash,
+                }).then((result) => {
+                    setIsBusy(false)
+                    setMessage(`${name} donated ${amount} | transaction: ${transaction.transactionHash} | wallet: ${state.account}`)
+                }).catch((error) => { console.error(error) })
+            }
         });
     }
 
@@ -87,12 +106,20 @@ export default function ContributionForm(): ReactElement {
                         <input type="text" name="destination_wallet" value={destinationWallet} onChange={(event) => setDestinationWallet(event.target.value)} />
                         <span>{destinationWallet}</span>
                     </div>
-                    <button onClick={ subitSendDonation }>Submit donation</button>
+                    { isBusy? (<span>Loading ....</span>): (
+                        <button onClick={subitSendDonation}>Submit donation</button>)
+                    }
+
                 </div>
-                ) : (
+            ) : (
                     <div>Not enough balance ( USD ) </div>
                 )
             }
+
+            <div>
+                <h4>RESULT LOG:</h4>
+                <span>{ message }</span>
+            </div>
         </div>
     );
 }
