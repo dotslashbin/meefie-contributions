@@ -1,6 +1,6 @@
 import { ethers } from 'ethers'
 import { useStore }  from '@/context/StoreContext'
-import {DONATION_WALLET, TOKEN_ABI, TOKEN_ADDRESS} from "../../config";
+import {DONATION_WALLET, TOKEN_ABI, TOKEN_ADDRESS, TOKEN_DECIMAL} from "../../config";
 
 export const sendDonation = async (amount: string): Promise<void> => {
     try {
@@ -11,7 +11,7 @@ export const sendDonation = async (amount: string): Promise<void> => {
 
         const tokenContract: ethers.Contract = new ethers.Contract(TOKEN_ADDRESS, TOKEN_ABI, signer)
 
-        const transaction = await tokenContract.transfer(DONATION_WALLET, ethers.utils.parseUnits(amount, 18))
+        const transaction = await tokenContract.transfer(DONATION_WALLET, ethers.utils.parseUnits(amount, TOKEN_DECIMAL))
 
         return transaction.wait()
 

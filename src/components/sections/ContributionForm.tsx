@@ -1,7 +1,7 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import { useStore } from "@/context/StoreContext";
 import { ethers } from 'ethers'
-import { MIN_DONATION, TOKEN_ABI, TOKEN_ADDRESS } from "../../../config";
+import { MIN_DONATION, TOKEN_ABI, TOKEN_ADDRESS, TOKEN_DECIMAL } from "../../../config";
 import { BalanceType } from "@/types/Web3Types";
 import { sendDonation } from "@/services/Web3Service";
 import { addContributor } from '@/services/Firebase'
@@ -38,7 +38,7 @@ export default function ContributionForm(): ReactElement {
                 }
 
                 if (balances.token) {
-                    setTokenBalance(ethers.utils.formatUnits(balances.token, 6));
+                    setTokenBalance(ethers.utils.formatUnits(balances.token, TOKEN_DECIMAL));
                 }
             } catch (error) {
                 console.error('Error fetching balance: ', error);

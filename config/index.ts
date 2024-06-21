@@ -15,6 +15,8 @@ export const DONATION_WALLET: string = '0xbb401227A756a11BbB9e9eE316B75E3d045cdF
 
 export const MIN_DONATION: number = 50
 
+export const TOKEN_DECIMAL = 6
+
 export const FIREBASE_CONFIG = {
     apiKey: "AIzaSyBgKJbn7grsCTFpoc5vb5vi_MaFOV0rIsw",
     authDomain: "meefie-contributions.firebaseapp.com",
