@@ -14,14 +14,12 @@ export default function Index(): ReactElement {
 
     return (
         <Layout>
-            <Head>
-                <title>Thios is the main mpage</title>
-                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-            </Head>
-            <div>
-                <NavBar/>
-                {state.account ? (<ContributionForm/>) : (<WelcomeScreen/>)}
-            </div>
+            <NavBar/>
+            <main className="flex min-h-screen flex-col items-center justify-between p-24">
+                <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
+                    {state.account ? (<ContributionForm/>) : (<WelcomeScreen/>)}
+                </div>
+            </main>
         </Layout>
 
     )
