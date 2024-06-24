@@ -1,13 +1,16 @@
 // context/StoreContext.tsx
 import React, { createContext, useContext, useReducer, ReactNode } from 'react'
+import {Contribution} from "@/types";
 
 interface State {
+    history: Contribution[],
     account: string
 }
 
 type Action = { type: 'SET_ACCOUNT', payload: string } | { type: 'SAVE_DONATION', payload: {} };
 
 const initialState: State = {
+    history: [],
     account: ''
 };
 
