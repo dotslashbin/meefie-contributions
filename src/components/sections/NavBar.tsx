@@ -17,7 +17,7 @@ export const NavBar = () => {
     };
 
     return (
-        <nav className="flex items-center justify-between max-w-screen-xl px-6 mx-auto py-7 rounded-xl">
+        <nav className="flex items-center justify-between max-w-screen-xl px-6 mx-auto py-3 bg-yellow-500">
             <MetaMaskProvider debug={true} sdkOptions={sdkOptions}>
                 <ConnectWalletButton />
             </MetaMaskProvider>
