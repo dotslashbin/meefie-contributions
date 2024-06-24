@@ -3,6 +3,11 @@ import { useSDK } from "@metamask/sdk-react"
 import { formatAddress } from "@/utils/helpers"
 import WalletIcon from "../../../public/icons/WalletIcon"
 import { useStore } from '@/context/StoreContext'
+import { getDonations} from "@/services/Firebase"
+import {COLLECTION_NAME} from "@/utils/db";
+import {DocumentData} from "firebase/firestore";
+import {Contribution} from "@/types";
+
 
 export const ConnectWalletButton = () => {
     const { sdk, connected, connecting, account } = useSDK();
@@ -26,7 +31,14 @@ export const ConnectWalletButton = () => {
 
     useEffect(() => {
         if(account) {
+            // Assigns Account
             dispatch({ type: 'SET_ACCOUNT', payload: account })
+
+            // Assigns history
+            getDonations(COLLECTION_NAME, 'user_wallet', account).then((documents: DocumentData) => {
+                const data = documents.map((document: Contribution) => document)
+                dispatch({ type: 'SET_HISTORY', payload: data })
+            })
         }
     }, [account]);
 
