@@ -7,7 +7,7 @@ interface State {
     account: string
 }
 
-type Action = { type: 'SET_ACCOUNT', payload: string } | { type: 'SAVE_DONATION', payload: {} };
+type Action = { type: 'SET_ACCOUNT', payload: string } | { type: 'SET_HISTORY', payload: {} };
 
 const initialState: State = {
     history: [],
@@ -18,6 +18,8 @@ const reducer = (state: State, action: Action ): State => {
     switch (action.type) {
         case 'SET_ACCOUNT':
             return { ...state, account: action.payload };
+        case 'SET_HISTORY':
+            return {...state, history: action.payload } as State
         default:
             return state;
     }

@@ -8,16 +8,26 @@ import HistoryItem from "@/components/sections/HistoryItem";
 
 export default function History(): ReactElement {
 
-    const { state } = useStore()
+    const { state, dispatch } = useStore()
     const [ contributions, setContributions ] = useState<Contribution[]>([])
 
     useEffect(() => {
-        if(!state.history) {
+
+        if(state.history.length == 0) {
             getDonations(COLLECTION_NAME, 'user_wallet', state.account).then((documents: DocumentData) => {
-                setContributions(documents.map((document: Contribution) => document))
+                const data = documents.map((document: Contribution) => document)
+                setContributions(data)
+
+                dispatch({ type: 'SET_HISTORY', payload: data })
             })
+        } else  {
+            // GEt from store
+            console.log('#DEBUG ..inside sotre: "', state.history)
         }
-    }, [state]);
+
+
+
+    }, []);
 
     return (
         <div>
