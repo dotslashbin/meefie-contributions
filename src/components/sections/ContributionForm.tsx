@@ -46,7 +46,7 @@ export default function ContributionForm(): ReactElement {
         };
 
         initBalances().then(() => {
-            console.log("Balance updated ....")
+            // console.log("Balance updated ....")
         });
     }, [state.account]);
 

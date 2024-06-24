@@ -13,7 +13,6 @@ export const addContributor = async (contribution: Contribution) => {
 };
 
 export const getDonations = async(collectionName: string, field: string, value: string): Promise<DocumentData[]> => {
-    console.log('#FETCHING data ... ', collectionName, field, value)
     const queryAssembler = query(collection(db, collectionName), where(field, '==', value))
     const querySnapshot = await getDocs(queryAssembler)
     return querySnapshot.docs.map(doc => doc.data())
