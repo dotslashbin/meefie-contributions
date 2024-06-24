@@ -27,3 +27,5 @@ export const FIREBASE_CONFIG = {
 };
 
 export const COLLECTION_NAME = 'contributions'
+
+export const BLOCK_EXPLORER_URL = 'http://sepolia.etherscan.io/tx/'
