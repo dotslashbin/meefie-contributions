@@ -10,7 +10,7 @@ const Certificate = () => {
 
     const generatePdfDocument = async () => {
         setLoading(true);
-        const blob = await pdf(<ContributionCertificate />).toBlob();
+        const blob = await pdf(<ContributionCertificate contributor='Joshua Fuentes' contribution='100' token_amount='100000000' wallet='ABV123'/>).toBlob();
         saveAs(blob, 'example.pdf');
         setLoading(false);
     };
