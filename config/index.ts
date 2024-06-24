@@ -29,3 +29,5 @@ export const FIREBASE_CONFIG = {
 export const COLLECTION_NAME = 'contributions'
 
 export const BLOCK_EXPLORER_URL = 'http://sepolia.etherscan.io/tx/'
+
+export const INTITIAL_VALUE_PER_USDT = 0.001
