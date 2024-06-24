@@ -57,7 +57,7 @@ export default function ContributionForm(): ReactElement {
 
     }, [tokenBalance]);
 
-    const subitSendDonation = () => {
+    const submitSendDonation = () => {
         setIsBusy(true)
         sendDonation(amount).then((transaction: any) => {
             // @ts-ignore
@@ -107,7 +107,7 @@ export default function ContributionForm(): ReactElement {
                         <span>{destinationWallet}</span>
                     </div>
                     { isBusy? (<span>Loading ....</span>): (
-                        <button onClick={subitSendDonation}>Submit donation</button>)
+                        <button onClick={submitSendDonation}>Submit donation</button>)
                     }
 
                 </div>
