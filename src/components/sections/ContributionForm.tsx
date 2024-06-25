@@ -88,37 +88,96 @@ export default function ContributionForm(): ReactElement {
             </div>
 
             { canDonate? (
-                <div>
-                    <div>
-                        Name: <input name="name" type="text" value={name} onChange={(event) => setName(event.target.value)}/>
-                        <span>{ name }</span>
-                    </div>
-                    <div>
-                        Email: <input name="email" type="text" value={email} onChange={(event) => setEmail(event.target.value)}/>
-                        <span>{ email }</span>
-                    </div>
-                    <div>
-                        Amount: <input name="donation_amt" type="number" min={MIN_DONATION} value={amount} onChange={(event) => setAmount(event.target.value)}/>
-                        { amount }
-                    </div>
-                    <div>
-                        Destination Wallet (optional .. if filled in, MFT will be sent to this wallet during vesting period):
-                        <input type="text" name="destination_wallet" value={destinationWallet} onChange={(event) => setDestinationWallet(event.target.value)} />
-                        <span>{destinationWallet}</span>
-                    </div>
-                    { isBusy? (<span>Loading ....</span>): (
-                        <button onClick={submitSendDonation}>Submit donation</button>)
-                    }
+                <form>
+                    <div className="space-y-12 text-white">
+                        <div className="mt-5 grid grid-cols-1 gap-x-2 gap-y-2 sm:grid-cols-2">
+                            <label htmlFor="name" className="block text-sm font-medium leading-6 text-white">
+                                Name
+                            </label>
 
-                </div>
+                            <div className="">
+                                <div className="flex rounded-md shadow-sm ring-2 ring-inset ring-white sm:max-w-md">
+                                    <input name="name"
+                                           id="name"
+                                           type="text"
+                                           value={name}
+                                           onChange={(event) => setName(event.target.value)}
+                                           className="block flex-1 bg-transparent py-1.5 pl-1 text-white placeholder:text-white focus:ring-0 sm:text-sm"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="mt-5 grid grid-cols-1 gap-x-2 gap-y-2 sm:grid-cols-2">
+                            <label htmlFor="email" className="block text-sm font-medium leading-6 text-white">
+                                Email
+                            </label>
+
+                            <div className="">
+                                <div className="flex rounded-md shadow-sm ring-2 ring-inset ring-white sm:max-w-md">
+                                    <input name="email"
+                                           type="text"
+                                           id="email"
+                                           value={email}
+                                           onChange={(event) => setEmail(event.target.value)}
+                                           className="block flex-1 bg-transparent py-1.5 pl-1 text-white placeholder:text-white focus:ring-0 sm:text-sm"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="mt-5 grid grid-cols-1 gap-x-2 gap-y-2 sm:grid-cols-2">
+                            <label htmlFor="donation_amt" className="block text-sm font-medium leading-6 text-white">
+                                Amount
+                            </label>
+
+                            <div className="">
+                                <div className="flex rounded-md shadow-sm ring-2 ring-inset ring-white sm:max-w-md">
+                                    <input
+                                        name="donation_amt"
+                                        id="donation_amt"
+                                        type="number"
+                                        min={MIN_DONATION}
+                                        value={amount}
+                                        onChange={(event) => setAmount(event.target.value)}
+                                        className="block flex-1 bg-transparent py-1.5 pl-1 text-white placeholder:text-white focus:ring-0 sm:text-sm"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="mt-5 grid grid-cols-1 gap-x-2 gap-y-2 sm:grid-cols-2">
+                            <label htmlFor="destination_wallet" className="block text-sm font-medium leading-6 text-white">
+                                OPTIONAL: If you enter a destination wallet, we will be sending the MFT tokens to that wallet instead. Otherwise, we will be sending it to the current wallet that is connected to this app.
+                            </label>
+
+                            <div className="">
+                                <div className="flex rounded-md shadow-sm ring-2 ring-inset ring-white sm:max-w-md">
+                                    <input
+                                        type="text"
+                                        id="destination_wallet"
+                                        name="destination_wallet"
+                                        value={destinationWallet}
+                                        onChange={(event) => setDestinationWallet(event.target.value)}
+                                        className="block flex-1 bg-transparent py-1.5 pl-1 text-white placeholder:text-white focus:ring-0 sm:text-sm"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        {isBusy ? (<span>Loading ....</span>) : (
+                            <button onClick={submitSendDonation}>Submit donation</button>)
+                        }
+                    </div>
+
+
+                </form>
             ) : (
-                    <div>Not enough balance ( USD ) </div>
-                )
+                <div>Not enough balance ( USD ) </div>
+            )
             }
 
             <div>
                 <h4>RESULT LOG:</h4>
-                <span>{ message }</span>
+                <span>{message}</span>
             </div>
         </div>
     );
