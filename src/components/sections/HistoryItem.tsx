@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import { Contribution } from "@/types";
 import {formatAddress} from "@/utils/helpers";
-import { BLOCK_EXPLORER_URL } from "../../../config";
+import {BLOCK_EXPLORER_URL, VALUE_PER_USDT} from "../../../config";
 
 // PDF Generation
 import { pdf } from '@react-pdf/renderer';
@@ -20,9 +20,9 @@ export default function ContributionItem({ contribution }: ContributionItemProps
     const generatePdfDocument = async () => {
         setLoading(true);
 
+        const tokenAmount = parseFloat(contribution.amount) / VALUE_PER_USDT
 
-
-        const blob = await pdf(<ContributionCertificate contributor={contribution.name} contribution={contribution.amount} token_amount='100000000' wallet={contribution.destination_wallet}/>).toBlob();
+        const blob = await pdf(<ContributionCertificate contributor={contribution.name} contribution={contribution.amount} token_amount={tokenAmount.toString()} wallet={contribution.destination_wallet}/>).toBlob();
         saveAs(blob, 'example.pdf');
         setLoading(false);
     };

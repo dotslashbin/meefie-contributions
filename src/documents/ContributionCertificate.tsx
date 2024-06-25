@@ -89,8 +89,7 @@ const MyDocument = ({ contributor, contribution, token_amount, wallet }: Contrib
             <Page size="A4" style={styles.page}>
                 <View style={styles.section}>
                     <Image style={styles.header} src={'./images/v11_15.png'}/>
-                    <Text style={styles.blurb_certificate}>CERTIFICATE</Text>
-                    <Text style={styles.blurb_of_contribution}>of contribution</Text>
+                    <Text style={styles.blurb_certificate}>CERTIFICATE of contribution</Text>
                     <Text style={styles.blurb_this_is_to}>This is to certify that</Text>
                     <Text style={styles.name}>{ contributor }</Text>
                     <Text style={styles.paragraph}>has contributed the amount of <Text>{ contribution }</Text> in <Text
