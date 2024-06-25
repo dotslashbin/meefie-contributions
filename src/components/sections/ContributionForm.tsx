@@ -80,7 +80,7 @@ export default function ContributionForm(): ReactElement {
 
     return (
         <div className="">
-            <div className="flex-row py-1 px-4 bg-white opacity-30 text-blue-900 rounded-2xl">
+            <div className="flex-row py-1 px-4 bg-white opacity-70 text-blue-900 rounded-2xl">
                 <span>YOUR BALANCE</span>
                 <div>
                     ETH: {ethBalance}

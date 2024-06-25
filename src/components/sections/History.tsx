@@ -11,13 +11,15 @@ export default function History(): ReactElement {
     const { state, dispatch } = useStore()
     const [ contributions, setContributions ] = useState<Contribution[]>([])
     return (
-        <div>
-            <h4>Your contributions:</h4>
-            { state.history.length > 0 ? (
-                <div>
-                    { state.history.map((contribution: Contribution) => (<HistoryItem key={contribution.transaction_hash} contribution={contribution} />))}
-                </div>
-            ): (<span>You have not made any contribution yet</span>)}
+        <div className="my-4">
+            <hr />
+            <div className="my-3.5">
+                { state.history.length > 0 ? (
+                    <div className="px-2.5 py-1 border border-dotted">
+                        { state.history.map((contribution: Contribution) => (<HistoryItem key={contribution.transaction_hash} contribution={contribution} />))}
+                    </div>
+                ): (<span>You have not made any contribution yet</span>)}
+            </div>
         </div>
     )
 }

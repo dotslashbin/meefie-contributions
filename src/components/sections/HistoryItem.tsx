@@ -19,19 +19,27 @@ export default function ContributionItem({ contribution }: ContributionItemProps
     // TODO: impelment fetching of theh correct number of tokens
     const generatePdfDocument = async () => {
         setLoading(true);
+
+
+
         const blob = await pdf(<ContributionCertificate contributor={contribution.name} contribution={contribution.amount} token_amount='100000000' wallet={contribution.destination_wallet}/>).toBlob();
         saveAs(blob, 'example.pdf');
         setLoading(false);
     };
 
     return (
-        <div>
-            <div>Transaction Hash:
+        <div className="bg-white text-black my-3.5 rounded p-1 font-thin text-xs">
+            <div>
+                tx Hash:
                 <a href={`${ BLOCK_EXPLORER_URL }${contribution.transaction_hash}`}>{ formatAddress(contribution.transaction_hash ) }</a>
             </div>
             <div>Amount: { contribution.amount }</div>
             <div>
-                <button onClick={ generatePdfDocument } disabled={ loading }>
+                <button
+                    onClick={generatePdfDocument} disabled={loading}
+                    type="button"
+                    className="inline-block rounded border-2 border-info px-6 pb-[6px] pt-2 text-xs font-medium uppercase leading-normal text-info transition duration-150 ease-in-out hover:border-info-600 hover:bg-info-50/50 hover:text-info-600 focus:border-info-600 focus:bg-info-50/50 focus:text-info-600 focus:outline-none focus:ring-0 active:border-info-700 active:text-info-700 motion-reduce:transition-none dark:hover:bg-yellow-400 dark:focus:bg-yellow-400"
+                    data-twe-ripple-init>
                     {loading ? 'Generating PDF...' : 'Download Certificate'}
                 </button>
             </div>
