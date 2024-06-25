@@ -46,7 +46,7 @@ export default function ContributionForm(): ReactElement {
         };
 
         initBalances().then(() => {
-            console.log("Balance updated ....")
+            // console.log("Balance updated ....")
         });
     }, [state.account]);
 
@@ -57,7 +57,7 @@ export default function ContributionForm(): ReactElement {
 
     }, [tokenBalance]);
 
-    const subitSendDonation = () => {
+    const submitSendDonation = () => {
         setIsBusy(true)
         sendDonation(amount).then((transaction: any) => {
             // @ts-ignore
@@ -79,47 +79,111 @@ export default function ContributionForm(): ReactElement {
     }
 
     return (
-        <div>
-            <div>
-                ETH bal: { ethBalance }
-            </div>
-            <div>
-                USD Token (OR OTHER TOKEN): { tokenBalance }
-            </div>
-
-            { canDonate? (
+        <div className="">
+            <div className="flex-row py-1 px-4 bg-white opacity-70 text-blue-900 rounded-2xl">
+                <span>YOUR BALANCE</span>
                 <div>
-                    <div>
-                        Name: <input name="name" type="text" value={name} onChange={(event) => setName(event.target.value)}/>
-                        <span>{ name }</span>
-                    </div>
-                    <div>
-                        Email: <input name="email" type="text" value={email} onChange={(event) => setEmail(event.target.value)}/>
-                        <span>{ email }</span>
-                    </div>
-                    <div>
-                        Amount: <input name="donation_amt" type="number" min={MIN_DONATION} value={amount} onChange={(event) => setAmount(event.target.value)}/>
-                        { amount }
-                    </div>
-                    <div>
-                        Destination Wallet (optional .. if filled in, MFT will be sent to this wallet during vesting period):
-                        <input type="text" name="destination_wallet" value={destinationWallet} onChange={(event) => setDestinationWallet(event.target.value)} />
-                        <span>{destinationWallet}</span>
-                    </div>
-                    { isBusy? (<span>Loading ....</span>): (
-                        <button onClick={subitSendDonation}>Submit donation</button>)
-                    }
-
+                    ETH: {ethBalance}
                 </div>
+                <div>
+                    USD: {tokenBalance}
+                </div>
+            </div>
+
+
+            {canDonate ? (
+                <form>
+                    <div className="space-y-12 text-white">
+                    <div className="mt-5 grid grid-cols-1 gap-x-2 gap-y-2 sm:grid-cols-2">
+                            <label htmlFor="name" className="block text-sm font-medium leading-6 text-white">
+                                Name
+                            </label>
+
+                            <div className="">
+                                <div className="flex rounded-md shadow-sm ring-2 ring-inset ring-white sm:max-w-md">
+                                    <input name="name"
+                                           id="name"
+                                           type="text"
+                                           value={name}
+                                           onChange={(event) => setName(event.target.value)}
+                                           className="block flex-1 bg-transparent py-1.5 pl-1 text-white placeholder:text-white focus:ring-0 sm:text-sm"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="mt-5 grid grid-cols-1 gap-x-2 gap-y-2 sm:grid-cols-2">
+                            <label htmlFor="email" className="block text-sm font-medium leading-6 text-white">
+                                Email
+                            </label>
+
+                            <div className="">
+                                <div className="flex rounded-md shadow-sm ring-2 ring-inset ring-white sm:max-w-md">
+                                    <input name="email"
+                                           type="text"
+                                           id="email"
+                                           value={email}
+                                           onChange={(event) => setEmail(event.target.value)}
+                                           className="block flex-1 bg-transparent py-1.5 pl-1 text-white placeholder:text-white focus:ring-0 sm:text-sm"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="mt-5 grid grid-cols-1 gap-x-2 gap-y-2 sm:grid-cols-2">
+                            <label htmlFor="donation_amt" className="block text-sm font-medium leading-6 text-white">
+                                Amount
+                            </label>
+
+                            <div className="">
+                                <div className="flex rounded-md shadow-sm ring-2 ring-inset ring-white sm:max-w-md">
+                                    <input
+                                        name="donation_amt"
+                                        id="donation_amt"
+                                        type="number"
+                                        min={MIN_DONATION}
+                                        value={amount}
+                                        onChange={(event) => setAmount(event.target.value)}
+                                        className="block flex-1 bg-transparent py-1.5 pl-1 text-white placeholder:text-white focus:ring-0 sm:text-sm"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="mt-5 grid grid-cols-1 gap-x-2 gap-y-2 sm:grid-cols-2">
+                            <label htmlFor="destination_wallet" className="block text-sm font-medium leading-6 text-white">
+                                OPTIONAL: If you enter a destination wallet, we will be sending the MFT tokens to that wallet instead. Otherwise, we will be sending it to the current wallet that is connected to this app.
+                            </label>
+
+                            <div className="">
+                                <div className="flex rounded-md shadow-sm ring-2 ring-inset ring-white sm:max-w-md">
+                                    <input
+                                        type="text"
+                                        id="destination_wallet"
+                                        name="destination_wallet"
+                                        value={destinationWallet}
+                                        onChange={(event) => setDestinationWallet(event.target.value)}
+                                        className="block flex-1 bg-transparent py-1.5 pl-1 text-white placeholder:text-white focus:ring-0 sm:text-sm"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="m-3">
+
+                        {isBusy ? (<span className="font-bold opacity-50">processing ....</span>) : (
+                            <button className="cursor-pointer bg-gradient-to-br from-amber-50 rounded h-10 px-1.5 text-whihte
+                            " onClick={submitSendDonation}>Submit donation</button>)
+                        }
+                        </div>
+                    </div>
+
+
+                </form>
             ) : (
-                    <div>Not enough balance ( USD ) </div>
-                )
+                <div>
+                    Not enough balance ( USD )
+                </div>
+            )
             }
 
-            <div>
-                <h4>RESULT LOG:</h4>
-                <span>{ message }</span>
-            </div>
         </div>
     );
 }

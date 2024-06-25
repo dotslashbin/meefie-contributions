@@ -13,10 +13,12 @@
     "@metamask/sdk-react": "^0.20.5",
     "@radix-ui/react-popover": "^1.0.7",
     "@radix-ui/react-slot": "^1.0.2",
+    "@react-pdf/renderer": "^3.4.4",
     "@types/firebase": "^3.2.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "ethers": "^5.7.2",
+    "file-saver": "^2.0.5",
     "firebase": "^10.12.2",
     "next": "14.2.4",
     "react": "^18",
@@ -25,6 +27,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@types/file-saver": "^2.0.7",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
