@@ -79,18 +79,22 @@ export default function ContributionForm(): ReactElement {
     }
 
     return (
-        <div>
-            <div>
-                ETH bal: { ethBalance }
-            </div>
-            <div>
-                USD Token (OR OTHER TOKEN): { tokenBalance }
+        <div className="">
+            <div className="flex-row py-1 px-4 bg-white opacity-30 text-blue-900 rounded-2xl">
+                <span>YOUR BALANCE</span>
+                <div>
+                    ETH: {ethBalance}
+                </div>
+                <div>
+                    USD: {tokenBalance}
+                </div>
             </div>
 
-            { canDonate? (
+
+            {canDonate ? (
                 <form>
                     <div className="space-y-12 text-white">
-                        <div className="mt-5 grid grid-cols-1 gap-x-2 gap-y-2 sm:grid-cols-2">
+                    <div className="mt-5 grid grid-cols-1 gap-x-2 gap-y-2 sm:grid-cols-2">
                             <label htmlFor="name" className="block text-sm font-medium leading-6 text-white">
                                 Name
                             </label>
@@ -106,7 +110,6 @@ export default function ContributionForm(): ReactElement {
                                 </div>
                             </div>
                         </div>
-
                         <div className="mt-5 grid grid-cols-1 gap-x-2 gap-y-2 sm:grid-cols-2">
                             <label htmlFor="email" className="block text-sm font-medium leading-6 text-white">
                                 Email
@@ -163,22 +166,24 @@ export default function ContributionForm(): ReactElement {
                             </div>
                         </div>
 
-                        {isBusy ? (<span>Loading ....</span>) : (
-                            <button onClick={submitSendDonation}>Submit donation</button>)
+                        <div className="m-3">
+
+                        {isBusy ? (<span className="font-bold opacity-50">processing ....</span>) : (
+                            <button className="cursor-pointer bg-gradient-to-br from-amber-50 rounded h-10 px-1.5 text-whihte
+                            " onClick={submitSendDonation}>Submit donation</button>)
                         }
+                        </div>
                     </div>
 
 
                 </form>
             ) : (
-                <div>Not enough balance ( USD ) </div>
+                <div>
+                    Not enough balance ( USD )
+                </div>
             )
             }
 
-            <div>
-                <h4>RESULT LOG:</h4>
-                <span>{message}</span>
-            </div>
         </div>
     );
 }

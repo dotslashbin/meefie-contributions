@@ -45,14 +45,19 @@ export const ConnectWalletButton = () => {
     return (
         <div className="relative">
             {connected && account ? (
-                <div>
-                    account: <span className='underline'>{ formatAddress(account) }</span> &nbsp;
-                    <button onClick={disconnect} className="bg-blue-800 block w-full rounded-md border-2 py-1 text-white shadow-sm ring-1 ring-inset ring-white-300">disconnect</button>
+                <div className="flex justify-between">
+                    <div>
+                        account: <span className='underline'>{formatAddress(account)}</span>
+                    </div>
+                    <button onClick={disconnect}
+                            className="bg-blue-800 block w-fit rounded-md border-1 py-1 px-1 text-white shadow-sm ring-white-300">disconnect
+                    </button>
                 </div>
             ) : (
                 <div>
-                    <button disabled={connecting} onClick={connect} className="flex flex-row items-left justify-left align-super cursor-pointer">
-                        <WalletIcon className="mr-2 h-4 w-4" />
+                    <button disabled={connecting} onClick={connect}
+                            className="flex flex-row items-left justify-left align-super cursor-pointer">
+                    <WalletIcon className="mr-2 h-4 w-4" />
                         Connect Wallet
                     </button>
                 </div>

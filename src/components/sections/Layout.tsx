@@ -13,7 +13,7 @@ export default function Layout ({ children }: LayoutProps) {
             </Head>
             <main className="bg-[url('/images/background.jpg')]">{children}</main>
             <footer className="bg-yellow-500 text-blue p-4 text-center">
-                <p>MeeFie© 2024 My Website</p>
+                <p>MeeFie©2024</p>
             </footer>
         </div>
     )
