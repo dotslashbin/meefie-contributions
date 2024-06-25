@@ -25,3 +25,9 @@ export const FIREBASE_CONFIG = {
     messagingSenderId: "720478229275",
     appId: "1:720478229275:web:b1dcf9796cd01ec7f9b9be"
 };
+
+export const COLLECTION_NAME = 'contributions'
+
+export const BLOCK_EXPLORER_URL = 'http://sepolia.etherscan.io/tx/'
+
+export const VALUE_PER_USDT = 0.001
