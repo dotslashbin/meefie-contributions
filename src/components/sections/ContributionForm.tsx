@@ -7,6 +7,7 @@ import { sendDonation } from "@/services/Web3Service"
 import { addContributor } from '@/services/Firebase'
 import { FormErrors } from "@/types/FormErrors"
 import firebase from 'firebase/app'
+import Balances from "@/components/sections/Balances";
 
 export default function ContributionForm(): ReactElement {
 
@@ -116,17 +117,7 @@ export default function ContributionForm(): ReactElement {
 
     return (
         <div className="">
-            <div className="flex-row py-1 px-4 bg-white opacity-70 text-blue-900 rounded-2xl">
-                <span>YOUR BALANCE</span>
-                <div>
-                    ETH: {ethBalance}
-                </div>
-                <div>
-                    USD: {tokenBalance}
-                </div>
-            </div>
-
-
+            <Balances ethBalance={ethBalance} tokenBalance={tokenBalance} />
             {canDonate ? (
                 <div>
                     <div className="space-y-12 text-white">
