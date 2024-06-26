@@ -1,4 +1,4 @@
-export const TOKEN_ADDRESS: string = '0x7169D38820dfd117C3FA1f22a697dBA58d90BA06'
+export const TOKEN_ADDRESS: string = `${process.env.NEXT_PUBLIC_TOKEN_ADDRESS}`;
 
 export const TOKEN_ABI: string[] = [
     // Get the account balance
@@ -11,23 +11,24 @@ export const TOKEN_ABI: string[] = [
     "event Transfer(address indexed from, address indexed to, uint256 amount)"
 ]
 
-export const DONATION_WALLET: string = '0xbb401227A756a11BbB9e9eE316B75E3d045cdF3b'
+export const DONATION_WALLET: string = `${process.env.NEXT_PUBLIC_DONATION_WALLET}`
 
-export const MIN_DONATION: number = 50
+// @ts-ignore
+export const MIN_DONATION: number = process.env.NEXT_PUBLIC_MIN_DONATION
 
 export const TOKEN_DECIMAL = 6
 
 export const FIREBASE_CONFIG = {
-    apiKey: "AIzaSyBgKJbn7grsCTFpoc5vb5vi_MaFOV0rIsw",
-    authDomain: "meefie-contributions.firebaseapp.com",
-    projectId: "meefie-contributions",
-    storageBucket: "meefie-contributions.appspot.com",
-    messagingSenderId: "720478229275",
-    appId: "1:720478229275:web:b1dcf9796cd01ec7f9b9be"
+    apiKey: process.env.NEXT_PUBLIC_FB_API_KEY,
+    authDomain: process.env.NEXT_PUBLIC_FB_AUTH_DOMAIN,
+    projectId: process.env.NEXT_PUBLIC_FB_PROJECT_ID,
+    storageBucket: process.env.NEXT_PUBLIC_FB_STORAGE_BUCKET,
+    messagingSenderId: process.env.NEXT_PUBLIC_FB_MESSAGING_ID,
+    appId: process.env.NEXT_PUBLIC_FB_APP_ID
 };
 
-export const COLLECTION_NAME = 'contributions'
+export const COLLECTION_NAME = process.env.NEXT_PUBLIC_COLLECTION_NAME
 
-export const BLOCK_EXPLORER_URL = 'http://sepolia.etherscan.io/tx/'
+export const BLOCK_EXPLORER_URL = process.env.NEXT_PUBLIC_BLOCK_EXPLORER_URL
 
-export const VALUE_PER_USDT = 0.001
+export const VALUE_PER_USDT = process.env.NEXT_PUBLIC_VALUE_PER_USDT
