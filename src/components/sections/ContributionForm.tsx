@@ -4,13 +4,17 @@ import { ethers } from 'ethers'
 import { MIN_DONATION, TOKEN_ABI, TOKEN_ADDRESS, TOKEN_DECIMAL } from "../../../config"
 import { BalanceType } from "@/types/Web3Types"
 import { sendDonation } from "@/services/Web3Service"
-import { addContributor } from '@/services/Firebase'
+import {addContributor, getDonations} from '@/services/Firebase'
 import { FormErrors } from "@/types/FormErrors"
 import firebase from 'firebase/app'
+import Balances from "@/components/sections/Balances";
+import {COLLECTION_NAME} from "@/utils/db";
+import {DocumentData} from "firebase/firestore";
+import {Contribution} from "@/types";
 
 export default function ContributionForm(): ReactElement {
 
-    const { state } = useStore()
+    const { state , dispatch } = useStore()
 
     const [ ethBalance, setEthBalance ] = useState<string>('')
     const [ tokenBalance, setTokenBalance ] = useState<string>('')
@@ -66,7 +70,6 @@ export default function ContributionForm(): ReactElement {
             setIsBusy(true)
 
             sendDonation(amount).then((transaction: any) => {
-
                 // @ts-ignore
                 if (transaction) {
                     setDonationTxn(transaction.transactionHash)
@@ -75,12 +78,17 @@ export default function ContributionForm(): ReactElement {
                         email: email,
                         amount: amount,
                         user_wallet: state.account,
-                        destination_wallet: destinationWallet,
+                        destination_wallet: !destinationWallet ? state.account:destinationWallet,
                         transaction_hash: transaction.transactionHash,
                         transaction_date: new Date(),
                     }).then((result) => {
                         setIsBusy(false)
                         setMessage(`${name} donated ${amount} | transaction: ${transaction.transactionHash} | wallet: ${state.account}`)
+
+                        getDonations(COLLECTION_NAME, 'user_wallet', state.account).then((documents: DocumentData) => {
+                            const data = documents.map((document: Contribution) => document)
+                            dispatch({ type: 'SET_HISTORY', payload: data })
+                        })
                     }).catch((error) => { console.error(error) })
                 }
             });
@@ -116,17 +124,7 @@ export default function ContributionForm(): ReactElement {
 
     return (
         <div className="">
-            <div className="flex-row py-1 px-4 bg-white opacity-70 text-blue-900 rounded-2xl">
-                <span>YOUR BALANCE</span>
-                <div>
-                    ETH: {ethBalance}
-                </div>
-                <div>
-                    USD: {tokenBalance}
-                </div>
-            </div>
-
-
+            <Balances ethBalance={ethBalance} tokenBalance={tokenBalance} />
             {canDonate ? (
                 <div>
                     <div className="space-y-12 text-white">
