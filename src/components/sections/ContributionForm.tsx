@@ -77,7 +77,7 @@ export default function ContributionForm(): ReactElement {
                         user_wallet: state.account,
                         destination_wallet: destinationWallet,
                         transaction_hash: transaction.transactionHash,
-                        transaction_date: new Date().toDateString(),
+                        transaction_date: new Date(),
                     }).then((result) => {
                         setIsBusy(false)
                         setMessage(`${name} donated ${amount} | transaction: ${transaction.transactionHash} | wallet: ${state.account}`)
