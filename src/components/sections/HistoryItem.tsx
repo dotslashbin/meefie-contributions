@@ -16,10 +16,10 @@ export default function ContributionItem({ contribution }: ContributionItemProps
 
     const [loading, setLoading] = useState(false);
 
-    // TODO: impelment fetching of theh correct number of tokens
     const generatePdfDocument = async () => {
         setLoading(true);
 
+        // @ts-ignore
         const tokenAmount = parseFloat(contribution.amount) / VALUE_PER_USDT
 
         const blob = await pdf(<ContributionCertificate contributor={contribution.name} contribution={contribution.amount} token_amount={tokenAmount.toString()} wallet={contribution.destination_wallet}/>).toBlob();
