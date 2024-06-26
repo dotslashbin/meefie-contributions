@@ -117,6 +117,10 @@ export default function ContributionForm(): ReactElement {
             newErrors.amount = 'An amount is required';
         }
 
+        if(destinationWallet && !ethers.utils.isAddress(destinationWallet)) {
+            newErrors.destination_wallet = 'Destination wallet is invalid'
+        }
+
         setErrors(newErrors);
 
         return Object.keys(newErrors).length === 0;
@@ -200,6 +204,7 @@ export default function ContributionForm(): ReactElement {
                                         className="block flex-1 bg-transparent py-1.5 pl-1 text-white placeholder:text-white focus:ring-0 sm:text-sm"
                                     />
                                 </div>
+                                {errors.destination_wallet && <p className="text-red-500 text-sm">{ errors.destination_wallet }</p>}
                             </div>
                         </div>
 
