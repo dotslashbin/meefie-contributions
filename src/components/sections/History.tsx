@@ -18,7 +18,7 @@ export default function History(): ReactElement {
                     <div className="px-2.5 py-1 border border-dotted">
                         { state.history.map((contribution: Contribution) => (<HistoryItem key={contribution.transaction_hash} contribution={contribution} />))}
                     </div>
-                ): (<span>You have not made any contribution yet</span>)}
+                ): (<div className="my-1 text-white"><span>You have not made any contribution yet</span></div>)}
             </div>
         </div>
     )

@@ -1,10 +1,12 @@
-import React, { ReactElement, useEffect, useState } from 'react';
-import { useStore } from "@/context/StoreContext";
+import React, { ReactElement, useEffect, useState } from 'react'
+import { useStore } from "@/context/StoreContext"
 import { ethers } from 'ethers'
-import { MIN_DONATION, TOKEN_ABI, TOKEN_ADDRESS, TOKEN_DECIMAL } from "../../../config";
-import { BalanceType } from "@/types/Web3Types";
-import { sendDonation } from "@/services/Web3Service";
+import { MIN_DONATION, TOKEN_ABI, TOKEN_ADDRESS, TOKEN_DECIMAL } from "../../../config"
+import { BalanceType } from "@/types/Web3Types"
+import { sendDonation } from "@/services/Web3Service"
 import { addContributor } from '@/services/Firebase'
+import { FormErrors } from "@/types/FormErrors"
+import firebase from 'firebase/app'
 
 export default function ContributionForm(): ReactElement {
 
@@ -20,13 +22,14 @@ export default function ContributionForm(): ReactElement {
     const [ donationTxnHash, setDonationTxn ] = useState<string>('')
     const [ isBusy, setIsBusy ] = useState<boolean>(false)
     const [ message, setMessage ] = useState<string>('')
+    const [ errors, setErrors ] = useState<FormErrors>({})
 
     useEffect(() => {
         const initBalances = async () => {
             try {
                 // @ts-ignore
-                const provider = new ethers.providers.Web3Provider(window.ethereum);
-                const tokenContract = new ethers.Contract(TOKEN_ADDRESS, TOKEN_ABI, provider);
+                const provider: ethers.providers.Web3Provider = new ethers.providers.Web3Provider(window.ethereum);
+                const tokenContract: ethers.Contract = new ethers.Contract(TOKEN_ADDRESS, TOKEN_ABI, provider);
 
                 const balances: BalanceType = {
                     eth: await provider.getBalance(state.account),
@@ -58,24 +61,57 @@ export default function ContributionForm(): ReactElement {
     }, [tokenBalance]);
 
     const submitSendDonation = () => {
-        setIsBusy(true)
-        sendDonation(amount).then((transaction: any) => {
-            // @ts-ignore
-            if (transaction) {
-                setDonationTxn(transaction.transactionHash)
-                addContributor({
-                    name: name,
-                    email: email,
-                    amount: amount,
-                    user_wallet: state.account,
-                    destination_wallet: destinationWallet,
-                    transaction_hash: transaction.transactionHash,
-                }).then((result) => {
-                    setIsBusy(false)
-                    setMessage(`${name} donated ${amount} | transaction: ${transaction.transactionHash} | wallet: ${state.account}`)
-                }).catch((error) => { console.error(error) })
-            }
-        });
+
+        if (validate()) {
+            setIsBusy(true)
+
+            sendDonation(amount).then((transaction: any) => {
+
+                // @ts-ignore
+                if (transaction) {
+                    setDonationTxn(transaction.transactionHash)
+                    addContributor({
+                        name: name,
+                        email: email,
+                        amount: amount,
+                        user_wallet: state.account,
+                        destination_wallet: destinationWallet,
+                        transaction_hash: transaction.transactionHash,
+                        transaction_date: new Date(),
+                    }).then((result) => {
+                        setIsBusy(false)
+                        setMessage(`${name} donated ${amount} | transaction: ${transaction.transactionHash} | wallet: ${state.account}`)
+                    }).catch((error) => { console.error(error) })
+                }
+            });
+        } else {
+            setIsBusy(false)
+        }
+    }
+
+    const validate = () => {
+        const newErrors: FormErrors = {};
+
+        // Name validation
+        if(!name) {
+            newErrors.name = 'A name is required'
+        }
+
+        // Email validation
+        if (!email) {
+            newErrors.email = 'Email is required';
+        } else if (!/\S+@\S+\.\S+/.test(email)) {
+            newErrors.email = 'Email is invalid';
+        }
+
+        // Text input validation
+        if (!amount) {
+            newErrors.amount = 'An amount is required';
+        }
+
+        setErrors(newErrors);
+
+        return Object.keys(newErrors).length === 0;
     }
 
     return (
@@ -92,7 +128,7 @@ export default function ContributionForm(): ReactElement {
 
 
             {canDonate ? (
-                <form>
+                <div>
                     <div className="space-y-12 text-white">
                     <div className="mt-5 grid grid-cols-1 gap-x-2 gap-y-2 sm:grid-cols-2">
                             <label htmlFor="name" className="block text-sm font-medium leading-6 text-white">
@@ -108,6 +144,7 @@ export default function ContributionForm(): ReactElement {
                                            onChange={(event) => setName(event.target.value)}
                                            className="block flex-1 bg-transparent py-1.5 pl-1 text-white placeholder:text-white focus:ring-0 sm:text-sm"/>
                                 </div>
+                                {errors.name && <p className="text-red-500 text-sm">{ errors.name }</p>}
                             </div>
                         </div>
                         <div className="mt-5 grid grid-cols-1 gap-x-2 gap-y-2 sm:grid-cols-2">
@@ -118,12 +155,13 @@ export default function ContributionForm(): ReactElement {
                             <div className="">
                                 <div className="flex rounded-md shadow-sm ring-2 ring-inset ring-white sm:max-w-md">
                                     <input name="email"
-                                           type="text"
+                                           type="email"
                                            id="email"
                                            value={email}
                                            onChange={(event) => setEmail(event.target.value)}
                                            className="block flex-1 bg-transparent py-1.5 pl-1 text-white placeholder:text-white focus:ring-0 sm:text-sm"/>
                                 </div>
+                                {errors.email && <p className="text-red-500 text-sm">{ errors.email }</p>}
                             </div>
                         </div>
 
@@ -144,6 +182,7 @@ export default function ContributionForm(): ReactElement {
                                         className="block flex-1 bg-transparent py-1.5 pl-1 text-white placeholder:text-white focus:ring-0 sm:text-sm"
                                     />
                                 </div>
+                                {errors.amount && <p className="text-red-500 text-sm">{ errors.amount }</p>}
                             </div>
                         </div>
 
@@ -176,7 +215,7 @@ export default function ContributionForm(): ReactElement {
                     </div>
 
 
-                </form>
+                </div>
             ) : (
                 <div>
                     Not enough balance ( USD )
