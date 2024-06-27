@@ -5,9 +5,9 @@ import ContributionForm from "@/components/sections/ContributionForm"
 import WelcomeScreen from "@/components/sections/WelcomeScreen"
 
 // Layout
-import Head from 'next/head'
 import Layout from '../components/sections/Layout'
-import History from "@/components/sections/History";
+import History from "@/components/sections/History"
+import Image from 'next/image'
 
 export default function Index(): ReactElement {
 
@@ -18,7 +18,7 @@ export default function Index(): ReactElement {
             <NavBar/>
             <main className="flex flex-col items-center justify-between p-10">
                 <div className="flex flex-row justify-between items-center w-fit p-[10px]">
-                    <img className="w-20" src='./images/meefie_logo.png'/>
+                    <Image className="w-20" src='/images/meefie_logo.png' alt="Meefie Logo" width={80} height={80}/>
                     <p className="text-white font-extralight w-1/2 text-xs pt-3">MeeFie thanks you for your interest.
                         Please fill out the form to make a contribution. It will require you to sign with your wallet
                         afterwards.</p>
