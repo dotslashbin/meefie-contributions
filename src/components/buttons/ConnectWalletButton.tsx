@@ -40,7 +40,7 @@ export const ConnectWalletButton = () => {
                 dispatch({ type: 'SET_HISTORY', payload: data })
             })
         }
-    }, [account]);
+    }, [account, dispatch]);
 
     return (
         <div className="relative">
