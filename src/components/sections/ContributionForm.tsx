@@ -1,14 +1,22 @@
-import React, { ReactElement, useEffect, useState } from 'react';
-import { useStore } from "@/context/StoreContext";
+import React, { ReactElement, useEffect, useState } from 'react'
+import { useStore } from "@/context/StoreContext"
 import { ethers } from 'ethers'
-import { MIN_DONATION, TOKEN_ABI, TOKEN_ADDRESS, TOKEN_DECIMAL } from "../../../config";
-import { BalanceType } from "@/types/Web3Types";
-import { sendDonation } from "@/services/Web3Service";
-import { addContributor } from '@/services/Firebase'
+import { MIN_DONATION, TOKEN_ABI, TOKEN_ADDRESS, TOKEN_DECIMAL } from "../../../config"
+import { BalanceType } from "@/types/Web3Types"
+import { sendDonation } from "@/services/Web3Service"
+import {addContributor, getDonations} from '@/services/Firebase'
+import { FormErrors } from "@/types/FormErrors"
+import firebase from 'firebase/app'
+import Balances from "@/components/sections/Balances";
+import {COLLECTION_NAME} from "@/utils/db";
+import {DocumentData} from "firebase/firestore";
+import {Contribution} from "@/types";
+import NoBalance from "@/components/sections/NoBalance";
+import ContributionNotification from "@/components/sections/ContributionNotification";
 
 export default function ContributionForm(): ReactElement {
 
-    const { state } = useStore()
+    const { state , dispatch } = useStore()
 
     const [ ethBalance, setEthBalance ] = useState<string>('')
     const [ tokenBalance, setTokenBalance ] = useState<string>('')
@@ -20,13 +28,14 @@ export default function ContributionForm(): ReactElement {
     const [ donationTxnHash, setDonationTxn ] = useState<string>('')
     const [ isBusy, setIsBusy ] = useState<boolean>(false)
     const [ message, setMessage ] = useState<string>('')
+    const [ errors, setErrors ] = useState<FormErrors>({})
 
     useEffect(() => {
         const initBalances = async () => {
             try {
                 // @ts-ignore
-                const provider = new ethers.providers.Web3Provider(window.ethereum);
-                const tokenContract = new ethers.Contract(TOKEN_ADDRESS, TOKEN_ABI, provider);
+                const provider: ethers.providers.Web3Provider = new ethers.providers.Web3Provider(window.ethereum);
+                const tokenContract: ethers.Contract = new ethers.Contract(TOKEN_ADDRESS, TOKEN_ABI, provider);
 
                 const balances: BalanceType = {
                     eth: await provider.getBalance(state.account),
@@ -58,43 +67,74 @@ export default function ContributionForm(): ReactElement {
     }, [tokenBalance]);
 
     const submitSendDonation = () => {
-        setIsBusy(true)
-        sendDonation(amount).then((transaction: any) => {
-            // @ts-ignore
-            if (transaction) {
-                setDonationTxn(transaction.transactionHash)
-                addContributor({
-                    name: name,
-                    email: email,
-                    amount: amount,
-                    user_wallet: state.account,
-                    destination_wallet: destinationWallet,
-                    transaction_hash: transaction.transactionHash,
-                }).then((result) => {
-                    setIsBusy(false)
-                    setMessage(`${name} donated ${amount} | transaction: ${transaction.transactionHash} | wallet: ${state.account}`)
-                }).catch((error) => { console.error(error) })
-            }
-        });
+
+        if (validate()) {
+            setIsBusy(true)
+
+            sendDonation(amount).then((transaction: any) => {
+                // @ts-ignore
+                if (transaction) {
+                    setDonationTxn(transaction.transactionHash)
+                    addContributor({
+                        name: name,
+                        email: email,
+                        amount: amount,
+                        user_wallet: state.account,
+                        destination_wallet: !destinationWallet ? state.account:destinationWallet,
+                        transaction_hash: transaction.transactionHash,
+                        transaction_date: new Date(),
+                    }).then((result) => {
+                        setIsBusy(false)
+                        setMessage(`Thank you for your contribution of ${amount} USDT. Your certificate will be sent via email within 2 working days.`)
+
+                        getDonations(COLLECTION_NAME, 'user_wallet', state.account).then((documents: DocumentData) => {
+                            const data = documents.map((document: Contribution) => document)
+                            dispatch({ type: 'SET_HISTORY', payload: data })
+                        })
+                    }).catch((error) => { console.error(error) })
+                }
+            });
+        } else {
+            setIsBusy(false)
+        }
+    }
+
+    const validate = () => {
+        const newErrors: FormErrors = {};
+
+        // Name validation
+        if(!name) {
+            newErrors.name = 'A name is required'
+        }
+
+        // Email validation
+        if (!email) {
+            newErrors.email = 'Email is required';
+        } else if (!/\S+@\S+\.\S+/.test(email)) {
+            newErrors.email = 'Email is invalid';
+        }
+
+        // Text input validation
+        if (!amount) {
+            newErrors.amount = 'An amount is required';
+        }
+
+        if(destinationWallet && !ethers.utils.isAddress(destinationWallet)) {
+            newErrors.destination_wallet = 'Destination wallet is invalid'
+        }
+
+        setErrors(newErrors);
+
+        return Object.keys(newErrors).length === 0;
     }
 
     return (
         <div className="">
-            <div className="flex-row py-1 px-4 bg-white opacity-70 text-blue-900 rounded-2xl">
-                <span>YOUR BALANCE</span>
-                <div>
-                    ETH: {ethBalance}
-                </div>
-                <div>
-                    USD: {tokenBalance}
-                </div>
-            </div>
-
-
+            <Balances ethBalance={ethBalance} tokenBalance={tokenBalance} />
             {canDonate ? (
-                <form>
+                <div>
                     <div className="space-y-12 text-white">
-                    <div className="mt-5 grid grid-cols-1 gap-x-2 gap-y-2 sm:grid-cols-2">
+                        <div className="mt-5 grid grid-cols-1 gap-x-2 gap-y-2 sm:grid-cols-2">
                             <label htmlFor="name" className="block text-sm font-medium leading-6 text-white">
                                 Name
                             </label>
@@ -108,6 +148,7 @@ export default function ContributionForm(): ReactElement {
                                            onChange={(event) => setName(event.target.value)}
                                            className="block flex-1 bg-transparent py-1.5 pl-1 text-white placeholder:text-white focus:ring-0 sm:text-sm"/>
                                 </div>
+                                {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
                             </div>
                         </div>
                         <div className="mt-5 grid grid-cols-1 gap-x-2 gap-y-2 sm:grid-cols-2">
@@ -118,12 +159,13 @@ export default function ContributionForm(): ReactElement {
                             <div className="">
                                 <div className="flex rounded-md shadow-sm ring-2 ring-inset ring-white sm:max-w-md">
                                     <input name="email"
-                                           type="text"
+                                           type="email"
                                            id="email"
                                            value={email}
                                            onChange={(event) => setEmail(event.target.value)}
                                            className="block flex-1 bg-transparent py-1.5 pl-1 text-white placeholder:text-white focus:ring-0 sm:text-sm"/>
                                 </div>
+                                {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
                             </div>
                         </div>
 
@@ -144,12 +186,16 @@ export default function ContributionForm(): ReactElement {
                                         className="block flex-1 bg-transparent py-1.5 pl-1 text-white placeholder:text-white focus:ring-0 sm:text-sm"
                                     />
                                 </div>
+                                {errors.amount && <p className="text-red-500 text-sm">{errors.amount}</p>}
                             </div>
                         </div>
 
                         <div className="mt-5 grid grid-cols-1 gap-x-2 gap-y-2 sm:grid-cols-2">
-                            <label htmlFor="destination_wallet" className="block text-sm font-medium leading-6 text-white">
-                                OPTIONAL: If you enter a destination wallet, we will be sending the MFT tokens to that wallet instead. Otherwise, we will be sending it to the current wallet that is connected to this app.
+                            <label htmlFor="destination_wallet"
+                                   className="block text-sm font-medium leading-6 text-white">
+                                OPTIONAL: If you enter a destination wallet, we will be sending the MFT tokens to that
+                                wallet instead. Otherwise, we will be sending it to the current wallet that is connected
+                                to this app.
                             </label>
 
                             <div className="">
@@ -163,25 +209,26 @@ export default function ContributionForm(): ReactElement {
                                         className="block flex-1 bg-transparent py-1.5 pl-1 text-white placeholder:text-white focus:ring-0 sm:text-sm"
                                     />
                                 </div>
+                                {errors.destination_wallet &&
+                                    <p className="text-red-500 text-sm">{errors.destination_wallet}</p>}
                             </div>
                         </div>
 
-                        <div className="m-3">
+                        <div className="flex flex-col items-center justify-between">
 
-                        {isBusy ? (<span className="font-bold opacity-50">processing ....</span>) : (
-                            <button className="cursor-pointer bg-gradient-to-br from-amber-50 rounded h-10 px-1.5 text-whihte
+                            {isBusy ? (
+                                <span className="font-bold opacity-50">Processing transaction ... Sit back and relax and let blockchain do it\'s work. You will see a summary below, once it is completed.</span>) : (
+                                <button className="cursor-pointer bg-gradient-to-br from-amber-50 rounded h-10 px-1.5 text-whihte
                             " onClick={submitSendDonation}>Submit donation</button>)
-                        }
+                            }
                         </div>
+                        { message && (<ContributionNotification message={message} header={'Success'} />)}
+
                     </div>
 
 
-                </form>
-            ) : (
-                <div>
-                    Not enough balance ( USD )
                 </div>
-            )
+            ) : (<NoBalance/>)
             }
 
         </div>

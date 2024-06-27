@@ -4,9 +4,9 @@ import { formatAddress } from "@/utils/helpers"
 import WalletIcon from "../../../public/icons/WalletIcon"
 import { useStore } from '@/context/StoreContext'
 import { getDonations} from "@/services/Firebase"
-import {COLLECTION_NAME} from "@/utils/db";
-import {DocumentData} from "firebase/firestore";
-import {Contribution} from "@/types";
+import { COLLECTION_NAME } from "@/utils/db";
+import { DocumentData } from "firebase/firestore";
+import { Contribution } from "@/types";
 
 
 export const ConnectWalletButton = () => {

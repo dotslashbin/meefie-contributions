@@ -5,4 +5,5 @@ export interface Contribution {
     user_wallet: string,
     destination_wallet: string,
     transaction_hash: string,
+    transaction_date: any,
 }
