@@ -1,8 +1,7 @@
 // components/MyDocument.js
 
 import React from 'react';
-import {Document, Page, Text, View, StyleSheet, Image} from '@react-pdf/renderer';
-import {blob} from "node:stream/consumers";
+import {Document, Page, Text, View, StyleSheet} from '@react-pdf/renderer';
 
 // Create styles
 const styles = StyleSheet.create({
@@ -88,17 +87,14 @@ const MyDocument = ({ contributor, contribution, token_amount, wallet }: Contrib
         <Document>
             <Page size="A4" style={styles.page}>
                 <View style={styles.section}>
-                    <Image style={styles.header} src={'./images/v11_15.png'}/>
                     <Text style={styles.blurb_certificate}>CERTIFICATE of contribution</Text>
                     <Text style={styles.blurb_this_is_to}>This is to certify that</Text>
                     <Text style={styles.name}>{ contributor }</Text>
                     <Text style={styles.paragraph}>has contributed the amount of <Text>{ contribution }</Text> in <Text
-                        style={styles.highlight}>USDT</Text> and will receive <Text
                         style={styles.highlight}>{ token_amount }</Text> tokens during the vesting period. </Text>
                     <Text style={styles.paragraph}>The price of the token will be approximately 0.001 USDT per MFT
                         (MeeFie) Token</Text>
                     <Text style={styles.paragraph}>The registered receiving wallet is { wallet }</Text>
-                    <Image style={styles.signature} src={'./images/v11_20.png'}/>
                     <Text style={{fontWeight: 'bold', fontSize: '16px', textAlign: 'center', marginTop: '40'}}>Enrick
                         Licen</Text>
                     <Text style={styles.ceo}>CEO</Text>
