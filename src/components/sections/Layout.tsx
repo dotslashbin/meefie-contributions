@@ -15,7 +15,7 @@ export default function Layout ({ children }: LayoutProps) {
                 {children}
             </main>
             <footer className="bg-yellow-500 text-blue p-4 text-center">
-                <p>MeeFie © 2024. All Rights Reserved</p>
+                <p>MeeFie © 2024. All Rights Reserved. Version: Beta v2</p>
             </footer>
         </div>
     )
