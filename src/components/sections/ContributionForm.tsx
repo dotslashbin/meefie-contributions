@@ -11,6 +11,8 @@ import Balances from "@/components/sections/Balances";
 import {COLLECTION_NAME} from "@/utils/db";
 import {DocumentData} from "firebase/firestore";
 import {Contribution} from "@/types";
+import NoBalance from "@/components/sections/NoBalance";
+import ContributionNotification from "@/components/sections/ContributionNotification";
 
 export default function ContributionForm(): ReactElement {
 
@@ -83,7 +85,7 @@ export default function ContributionForm(): ReactElement {
                         transaction_date: new Date(),
                     }).then((result) => {
                         setIsBusy(false)
-                        setMessage(`${name} donated ${amount} | transaction: ${transaction.transactionHash} | wallet: ${state.account}`)
+                        setMessage(`Thank you for your contribution of ${amount} USDT. Your certificate will be sent via email within 2 working days.`)
 
                         getDonations(COLLECTION_NAME, 'user_wallet', state.account).then((documents: DocumentData) => {
                             const data = documents.map((document: Contribution) => document)
@@ -132,7 +134,7 @@ export default function ContributionForm(): ReactElement {
             {canDonate ? (
                 <div>
                     <div className="space-y-12 text-white">
-                    <div className="mt-5 grid grid-cols-1 gap-x-2 gap-y-2 sm:grid-cols-2">
+                        <div className="mt-5 grid grid-cols-1 gap-x-2 gap-y-2 sm:grid-cols-2">
                             <label htmlFor="name" className="block text-sm font-medium leading-6 text-white">
                                 Name
                             </label>
@@ -146,7 +148,7 @@ export default function ContributionForm(): ReactElement {
                                            onChange={(event) => setName(event.target.value)}
                                            className="block flex-1 bg-transparent py-1.5 pl-1 text-white placeholder:text-white focus:ring-0 sm:text-sm"/>
                                 </div>
-                                {errors.name && <p className="text-red-500 text-sm">{ errors.name }</p>}
+                                {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
                             </div>
                         </div>
                         <div className="mt-5 grid grid-cols-1 gap-x-2 gap-y-2 sm:grid-cols-2">
@@ -163,7 +165,7 @@ export default function ContributionForm(): ReactElement {
                                            onChange={(event) => setEmail(event.target.value)}
                                            className="block flex-1 bg-transparent py-1.5 pl-1 text-white placeholder:text-white focus:ring-0 sm:text-sm"/>
                                 </div>
-                                {errors.email && <p className="text-red-500 text-sm">{ errors.email }</p>}
+                                {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
                             </div>
                         </div>
 
@@ -184,13 +186,16 @@ export default function ContributionForm(): ReactElement {
                                         className="block flex-1 bg-transparent py-1.5 pl-1 text-white placeholder:text-white focus:ring-0 sm:text-sm"
                                     />
                                 </div>
-                                {errors.amount && <p className="text-red-500 text-sm">{ errors.amount }</p>}
+                                {errors.amount && <p className="text-red-500 text-sm">{errors.amount}</p>}
                             </div>
                         </div>
 
                         <div className="mt-5 grid grid-cols-1 gap-x-2 gap-y-2 sm:grid-cols-2">
-                            <label htmlFor="destination_wallet" className="block text-sm font-medium leading-6 text-white">
-                                OPTIONAL: If you enter a destination wallet, we will be sending the MFT tokens to that wallet instead. Otherwise, we will be sending it to the current wallet that is connected to this app.
+                            <label htmlFor="destination_wallet"
+                                   className="block text-sm font-medium leading-6 text-white">
+                                OPTIONAL: If you enter a destination wallet, we will be sending the MFT tokens to that
+                                wallet instead. Otherwise, we will be sending it to the current wallet that is connected
+                                to this app.
                             </label>
 
                             <div className="">
@@ -204,26 +209,26 @@ export default function ContributionForm(): ReactElement {
                                         className="block flex-1 bg-transparent py-1.5 pl-1 text-white placeholder:text-white focus:ring-0 sm:text-sm"
                                     />
                                 </div>
-                                {errors.destination_wallet && <p className="text-red-500 text-sm">{ errors.destination_wallet }</p>}
+                                {errors.destination_wallet &&
+                                    <p className="text-red-500 text-sm">{errors.destination_wallet}</p>}
                             </div>
                         </div>
 
                         <div className="flex flex-col items-center justify-between">
 
-                        {isBusy ? (<span className="font-bold opacity-50">Processing transaction ... Sit back and relax and let blockchain do it\'s work. You will see a summary below, once it is completed.</span>) : (
-                            <button className="cursor-pointer bg-gradient-to-br from-amber-50 rounded h-10 px-1.5 text-whihte
+                            {isBusy ? (
+                                <span className="font-bold opacity-50">Processing transaction ... Sit back and relax and let blockchain do it\'s work. You will see a summary below, once it is completed.</span>) : (
+                                <button className="cursor-pointer bg-gradient-to-br from-amber-50 rounded h-10 px-1.5 text-whihte
                             " onClick={submitSendDonation}>Submit donation</button>)
-                        }
+                            }
                         </div>
+                        { message && (<ContributionNotification message={message} header={'Success'} />)}
+
                     </div>
 
 
                 </div>
-            ) : (
-                <div className="text-white">
-                    Not enough balance ( USD )
-                </div>
-            )
+            ) : (<NoBalance/>)
             }
 
         </div>

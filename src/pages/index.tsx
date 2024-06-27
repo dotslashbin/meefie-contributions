@@ -28,11 +28,11 @@ export default function Index(): ReactElement {
                     {state.account ? (<ContributionForm/>) : (<WelcomeScreen/>)}
                 </div>
 
-                {state.account ? (
+                {state.account && (
                     <div className="w-full items-center justify-between font-mono text-sm">
                         <History/>
                     </div>
-                ) : (<></>)}
+                )}
 
             </main>
         </Layout>
