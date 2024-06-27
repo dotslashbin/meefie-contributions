@@ -16,19 +16,26 @@ export default function Index(): ReactElement {
     return (
         <Layout>
             <NavBar/>
-            <main className="flex min-h-screen flex-col items-center justify-between p-24">
+            <main className="flex flex-col items-center justify-between p-10">
+                <div className="flex flex-row justify-between items-center w-fit p-[10px]">
+                    <img className="w-20" src='./images/meefie_logo.png'/>
+                    <p className="text-white font-extralight w-1/2 text-xs pt-3">MeeFie thanks you for your interest.
+                        Please fill out the form to make a contribution. It will require you to sign with your wallet
+                        afterwards.</p>
+                </div>
+
                 <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
                     {state.account ? (<ContributionForm/>) : (<WelcomeScreen/>)}
                 </div>
 
-                { state.account ? (
-                    <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-                        <History />
+                {state.account ? (
+                    <div className="w-full items-center justify-between font-mono text-sm">
+                        <History/>
                     </div>
-                ): (<></>)}
+                ) : (<></>)}
 
             </main>
         </Layout>
 
-)
+    )
 }

@@ -208,9 +208,9 @@ export default function ContributionForm(): ReactElement {
                             </div>
                         </div>
 
-                        <div className="m-3">
+                        <div className="flex flex-col items-center justify-between">
 
-                        {isBusy ? (<span className="font-bold opacity-50">processing ....</span>) : (
+                        {isBusy ? (<span className="font-bold opacity-50">Processing transaction ... Sit back and relax and let blockchain do it\'s work. You will see a summary below, once it is completed.</span>) : (
                             <button className="cursor-pointer bg-gradient-to-br from-amber-50 rounded h-10 px-1.5 text-whihte
                             " onClick={submitSendDonation}>Submit donation</button>)
                         }
@@ -220,7 +220,7 @@ export default function ContributionForm(): ReactElement {
 
                 </div>
             ) : (
-                <div>
+                <div className="text-white">
                     Not enough balance ( USD )
                 </div>
             )
