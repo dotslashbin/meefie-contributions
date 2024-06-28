@@ -210,7 +210,6 @@ export default function ContributionForm(): ReactElement {
                                 wallet instead. Otherwise, we will be sending it to the current wallet that is connected
                                 to this app.
                             </label>
-
                             <div className="">
                                 <div className="flex rounded-md shadow-sm ring-2 ring-inset ring-white sm:max-w-md">
                                     <input
@@ -228,18 +227,14 @@ export default function ContributionForm(): ReactElement {
                         </div>
 
                         <div className="flex flex-col items-center justify-between">
-
                             {isBusy ? (
                                 <span className="font-bold opacity-50">Processing transaction ... Sit back, relax and let the chain do the work. You will see a summary below, once it is completed.</span>) : (
-                                <button className="cursor-pointer bg-gradient-to-br from-amber-50 rounded h-10 px-1.5 text-whihte
+                                <button className="cursor-pointer bg-yellow-300 rounded h-10 px-1.5 text-black
                             " onClick={submitSendDonation}>Submit donation</button>)
                             }
                         </div>
                         { message && (<ContributionNotification message={message} header={messageType} />)}
-
                     </div>
-
-
                 </div>
             ) : (<NoBalance/>)
             }
