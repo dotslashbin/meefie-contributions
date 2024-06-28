@@ -28,6 +28,7 @@ export default function ContributionForm(): ReactElement {
     const [ donationTxnHash, setDonationTxn ] = useState<string>('')
     const [ isBusy, setIsBusy ] = useState<boolean>(false)
     const [ message, setMessage ] = useState<string>('')
+    const [ messageType, setMessageType ] = useState<string>('success')
     const [ errors, setErrors ] = useState<FormErrors>({})
 
     useEffect(() => {
@@ -67,7 +68,6 @@ export default function ContributionForm(): ReactElement {
     }, [tokenBalance]);
 
     const submitSendDonation = () => {
-
         if (validate()) {
             setIsBusy(true)
 
@@ -91,7 +91,13 @@ export default function ContributionForm(): ReactElement {
                             const data = documents.map((document: Contribution) => document)
                             dispatch({ type: 'SET_HISTORY', payload: data })
                         })
+
+                        clearFrom()
                     }).catch((error) => { console.error(error) })
+
+                } else {
+                    setMessage('There was a problem with the transaction. Please contact admin@meefie.com for support.')
+                    setMessageType('error')
                 }
             });
         } else {
@@ -126,6 +132,13 @@ export default function ContributionForm(): ReactElement {
         setErrors(newErrors);
 
         return Object.keys(newErrors).length === 0;
+    }
+
+    const clearFrom = () => {
+        setName('')
+        setAmount('')
+        setEmail('')
+        setDestinationWallet('')
     }
 
     return (
@@ -222,7 +235,7 @@ export default function ContributionForm(): ReactElement {
                             " onClick={submitSendDonation}>Submit donation</button>)
                             }
                         </div>
-                        { message && (<ContributionNotification message={message} header={'Success'} />)}
+                        { message && (<ContributionNotification message={message} header={messageType} />)}
 
                     </div>
 
