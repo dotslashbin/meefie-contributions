@@ -28,6 +28,7 @@ export default function ContributionForm(): ReactElement {
     const [ donationTxnHash, setDonationTxn ] = useState<string>('')
     const [ isBusy, setIsBusy ] = useState<boolean>(false)
     const [ message, setMessage ] = useState<string>('')
+    const [ messageType, setMessageType ] = useState<string>('success')
     const [ errors, setErrors ] = useState<FormErrors>({})
 
     useEffect(() => {
@@ -67,7 +68,6 @@ export default function ContributionForm(): ReactElement {
     }, [tokenBalance]);
 
     const submitSendDonation = () => {
-
         if (validate()) {
             setIsBusy(true)
 
@@ -91,7 +91,13 @@ export default function ContributionForm(): ReactElement {
                             const data = documents.map((document: Contribution) => document)
                             dispatch({ type: 'SET_HISTORY', payload: data })
                         })
+
+                        clearFrom()
                     }).catch((error) => { console.error(error) })
+
+                } else {
+                    setMessage('There was a problem with the transaction. Please contact admin@meefie.com for support.')
+                    setMessageType('error')
                 }
             });
         } else {
@@ -128,6 +134,13 @@ export default function ContributionForm(): ReactElement {
         return Object.keys(newErrors).length === 0;
     }
 
+    const clearFrom = () => {
+        setName('')
+        setAmount('')
+        setEmail('')
+        setDestinationWallet('')
+    }
+
     return (
         <div className="">
             <Balances ethBalance={ethBalance} tokenBalance={tokenBalance} />
@@ -138,7 +151,6 @@ export default function ContributionForm(): ReactElement {
                             <label htmlFor="name" className="block text-sm font-medium leading-6 text-white">
                                 Name
                             </label>
-
                             <div className="">
                                 <div className="flex rounded-md shadow-sm ring-2 ring-inset ring-white sm:max-w-md">
                                     <input name="name"
@@ -155,7 +167,6 @@ export default function ContributionForm(): ReactElement {
                             <label htmlFor="email" className="block text-sm font-medium leading-6 text-white">
                                 Email
                             </label>
-
                             <div className="">
                                 <div className="flex rounded-md shadow-sm ring-2 ring-inset ring-white sm:max-w-md">
                                     <input name="email"
@@ -173,7 +184,6 @@ export default function ContributionForm(): ReactElement {
                             <label htmlFor="donation_amt" className="block text-sm font-medium leading-6 text-white">
                                 Amount
                             </label>
-
                             <div className="">
                                 <div className="flex rounded-md shadow-sm ring-2 ring-inset ring-white sm:max-w-md">
                                     <input
@@ -197,7 +207,6 @@ export default function ContributionForm(): ReactElement {
                                 wallet instead. Otherwise, we will be sending it to the current wallet that is connected
                                 to this app.
                             </label>
-
                             <div className="">
                                 <div className="flex rounded-md shadow-sm ring-2 ring-inset ring-white sm:max-w-md">
                                     <input
@@ -215,18 +224,14 @@ export default function ContributionForm(): ReactElement {
                         </div>
 
                         <div className="flex flex-col items-center justify-between">
-
                             {isBusy ? (
                                 <span className="font-bold opacity-50">Processing transaction ... Sit back, relax and let the chain do the work. You will see a summary below, once it is completed.</span>) : (
-                                <button className="cursor-pointer bg-gradient-to-br from-amber-50 rounded h-10 px-1.5 text-whihte
+                                <button className="cursor-pointer bg-yellow-700 rounded h-10 px-1.5 text-white
                             " onClick={submitSendDonation}>Submit donation</button>)
                             }
                         </div>
-                        { message && (<ContributionNotification message={message} header={'Success'} />)}
-
+                        { message && (<ContributionNotification message={message} header={messageType} />)}
                     </div>
-
-
                 </div>
             ) : (<NoBalance/>)
             }
