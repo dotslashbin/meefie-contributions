@@ -226,7 +226,7 @@ export default function ContributionForm(): ReactElement {
                         <div className="flex flex-col items-center justify-between">
                             {isBusy ? (
                                 <span className="font-bold opacity-50">Processing transaction ... Sit back, relax and let the chain do the work. You will see a summary below, once it is completed.</span>) : (
-                                <button className="cursor-pointer bg-yellow-300 rounded h-10 px-1.5 text-black
+                                <button className="cursor-pointer bg-yellow-700 rounded h-10 px-1.5 text-white
                             " onClick={submitSendDonation}>Submit donation</button>)
                             }
                         </div>
