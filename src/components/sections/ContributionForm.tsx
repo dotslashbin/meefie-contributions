@@ -151,7 +151,6 @@ export default function ContributionForm(): ReactElement {
                             <label htmlFor="name" className="block text-sm font-medium leading-6 text-white">
                                 Name
                             </label>
-
                             <div className="">
                                 <div className="flex rounded-md shadow-sm ring-2 ring-inset ring-white sm:max-w-md">
                                     <input name="name"
@@ -168,7 +167,6 @@ export default function ContributionForm(): ReactElement {
                             <label htmlFor="email" className="block text-sm font-medium leading-6 text-white">
                                 Email
                             </label>
-
                             <div className="">
                                 <div className="flex rounded-md shadow-sm ring-2 ring-inset ring-white sm:max-w-md">
                                     <input name="email"
@@ -186,7 +184,6 @@ export default function ContributionForm(): ReactElement {
                             <label htmlFor="donation_amt" className="block text-sm font-medium leading-6 text-white">
                                 Amount
                             </label>
-
                             <div className="">
                                 <div className="flex rounded-md shadow-sm ring-2 ring-inset ring-white sm:max-w-md">
                                     <input
