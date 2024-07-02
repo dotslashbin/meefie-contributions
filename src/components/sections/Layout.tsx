@@ -3,20 +3,17 @@
 import React, { ReactNode } from 'react'
 import Head from 'next/head'
 import {LayoutProps} from "@/types/LayoutProps";
+import Header from "@/components/sections/Header";
+import Footer from "@/components/sections/Footer";
 
 export default function Layout ({ children }: LayoutProps) {
     return (
         <div>
-            <Head>
-                <title>Meefie Contributions Page</title>
-                <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-            </Head>
+            <Header />
             <main className="bg-[url('/images/background.jpg')]">
                 {children}
             </main>
-            <footer className="bg-yellow-500 text-blue p-4 text-center">
-                <p>MeeFie © 2024. All Rights Reserved. Version: Beta v3</p>
-            </footer>
+            <Footer />
         </div>
     )
 }
